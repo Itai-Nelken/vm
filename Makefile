@@ -2,6 +2,7 @@ CC = gcc
 CFLAGS = -Wall -Iinclude
 SRC = $(wildcard src/*.c)
 OBJ = $(SRC:.c=.o)
+PREFIX ?= /usr/local
 BIN ?= vm
 
 ifdef DEBUG
@@ -15,6 +16,11 @@ $(BIN): $(OBJ)
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) $< -o $@
+
+install: all
+	cp $(BIN) $(PREFIX)/bin
+uninstall:
+	rm -f $(PREFIX)/bin/$(BIN)
 
 clean:
 	rm -f $(OBJ) $(BIN)

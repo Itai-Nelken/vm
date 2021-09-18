@@ -10,24 +10,33 @@ typedef enum instruction_e {
 	MUL, // 5, pop 2 values from the stack, multiply them, and push the result
 	DIV, // 6, pop 2 values from the stack, divide the FIRST PUSHED by the LAST PUSHED, and push the result. (push 10, push 2, div == 10 / 2)
 	SET, // 7, USAGE: SET <reg> <val>
-	GET, // 8, USAGE: GET <reg> pushes the value of <reg> to the stack.
-	JMP, // 9, USAGE: JMP <pc val> jump to the PC value <pc val>
-	NOP, // a (10), do nothing.
-	HLT, // b (11), end the program.
-	END // c (12), has to be at the end of every program, also ends it.
+	PSET, // 8, USAGE: PSET <reg> pop the stack head and store the value in <reg>.
+	GET, // 9, USAGE: GET <reg> pushes the value of <reg> to the stack.
+	JMP, // a (10), USAGE: JMP <pc val> jump to the PC value <pc val>
+	NOP, // b (11), do nothing.
+	HLT, // c (12), end the program.
+	END // d (13), has to be at the end of every program, also ends it.
 } Instruction;
 
 typedef enum Regs_e {
-	A, B, C, D, E, F, PC, SP,
+	A, B, C, D, E, F, PC, SP, // A-F: general purpose registers, PC: program counter, SP: stack pointer
 	REGISTER_NUM // will always be the number of registers
 } Register;
 
 typedef struct emu_s {
-	int *program;
-	int program_size;
-	int stack[256];
-	int registers[REGISTER_NUM];
-	int isRunning;
+	int *program; // will hold the program for execution
+	int program_size; // size of 'program'
+	int stack[256]; // the stack.
+	int registers[REGISTER_NUM]; // the registers
+	int isRunning; // will be 1 if the program is running and 0 if not.
 } EMU_context;
+
+/******
+ * Remove all occurences of a character from a string.
+ * 
+ * @param str A string containing the character you want to remove.
+ * @param c The character you want to remove.
+ ******/
+void rm_all_chars(char* str, char c);
 
 #endif // COMMON_H

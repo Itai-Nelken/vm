@@ -40,15 +40,6 @@ void run(int *prog) {
 	EMU_free(context);
 }
 
-void rm_all_chars(char* str, char c) { // magic!
-    char *pr = str, *pw = str; // pr = read pointer, pw = write pointer
-    while(*pr) {
-        *pw = *pr++;
-        pw += (*pw != c); // if true, 0. else 1
-    }
-    *pw = '\0';
-}
-
 void run_from_file(const char *filename) {
 	long size=0;
 	char *buffer;
@@ -66,20 +57,24 @@ void run_from_file(const char *filename) {
 	fread(buffer, sizeof(char), size*sizeof(char), f);
 	rm_all_chars(buffer, '\n');
 	fclose(f);
-
+	
 	int x, *prog=malloc(strlen(buffer)*sizeof(int));
 	for(int i=0; (size_t)i<strlen(buffer); i++) {
 		switch(buffer[i]) {
 			case 'a':
 			case 'A':
-				prog[i]=NOP;
+				prog[i]=JMP;
 				break;
 			case 'b':
 			case 'B':
-				prog[i]=HLT;
+				prog[i]=NOP;
 				break;
 			case 'c':
 			case 'C':
+				prog[i]=HLT;
+				break;
+			case 'd':
+			case 'D':
 				prog[i]=END;
 				break;
 			default:
