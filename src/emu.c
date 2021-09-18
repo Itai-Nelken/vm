@@ -40,6 +40,15 @@ void run(int *prog) {
 	EMU_free(context);
 }
 
+void rm_all_chars(char* str, char c) { // magic!
+    char *pr = str, *pw = str; // pr = read pointer, pw = write pointer
+    while(*pr) {
+        *pw = *pr++;
+        pw += (*pw != c); // if true, 0. else 1
+    }
+    *pw = '\0';
+}
+
 void run_from_file(const char *filename) {
 	long size=0;
 	char *buffer;
@@ -55,6 +64,7 @@ void run_from_file(const char *filename) {
 
 	buffer=malloc(size*sizeof(char));
 	fread(buffer, sizeof(char), size*sizeof(char), f);
+	rm_all_chars(buffer, '\n');
 	fclose(f);
 
 	int x, *prog=malloc(strlen(buffer)*sizeof(int));
