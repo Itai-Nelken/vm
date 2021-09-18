@@ -24,7 +24,7 @@ In the repo's folder run `sudo make uninstall`.
 | ADD | 3 | `ADD` | pop 2 values from the stack, add them, and push the result. |
 | SUB | 4 | `SUB` | pop 2 values from the stack, substract the LAST PUSHED from the FIRST PUSHED, and push the result. (`PUSH 5, PUSH 2, SUB` == 5 - 2) |
 | MUL | 5 | `MUL` | pop 2 values from the stack, multiply them, and push the result. |
-| DIV | 6 | `DIV` | pop 2 values from the stack, divide the FIRST PUSHED by the LAST PUSHED, and push the result. (`PUSH 10, PUSH 2, DIV` == 10 / 2) |
+| DIV | 6 | `DIV` | pop 2 values from the stack, divide the FIRST PUSHED by the LAST PUSHED, and push the result. (`PUSH 4, PUSH 2, DIV` == 4 / 2) |
 | SET | 7 | `SET <register> <value>` | set `<register>` to `<value>`. |
 | PSET | 8 | `PSET <register>` | pop the stack head and store the value in `<register>` |
 | GET | 9 | `GET <register>` | push the value of `<register>`. |
