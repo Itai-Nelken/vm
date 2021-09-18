@@ -13,11 +13,9 @@ void progcpy(int *dest, int *src, int dest_size) {
 EMU_context *emu_init(int *prog) {
     EMU_context *new=malloc(sizeof(EMU_context));
     new->isRunning=1;
-    if(prog!=NULL) {
-        new->program_size=getProgSize(prog);
-        new->program=malloc(new->program_size*sizeof(int));
-        progcpy(new->program, prog, new->program_size);
-    }
+    new->program_size=getProgSize(prog);
+    new->program=malloc(new->program_size*sizeof(int));
+    progcpy(new->program, prog, new->program_size);
 
     return new;
 }
@@ -43,22 +41,29 @@ void run(int *prog) {
 }
 
 void run_from_file(const char *filename) {
-    int instruction;
+    long size=0;
+    char *buffer;
     FILE *f=fopen(filename, "r");
     if(!f) {
         perror("run_from_file(): fopen()");
         return;
     }
 
+    fseek(f, 0, SEEK_END);
+    size=ftell(f);
+    rewind(f);
 
+    buffer=malloc(size*sizeof(char));
+    fread(buffer, sizeof(char), size*sizeof(char), f);
+    fclose(f);
 
-    EMU_context *context=emu_init(NULL);
-    while((instruction=fgetc(f))!=EOF) {
-        if(context->isRunning==0) break;
-        instruction = (char)instruction - '0';
-        if(instruction==-38) continue;
-        exec(context, instruction);
-        printf("%d\n", instruction);
+    int x, *prog=malloc(strlen(buffer)*sizeof(int));
+    for(int i=0; i<strlen(buffer); i++) {
+        x=buffer[i]-'0';
+        if(x==-38) continue;
+        prog[i]=x;
     }
-    EMU_free(context);
+    run(prog);
+    free(prog);
+    free(buffer);
 }
