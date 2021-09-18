@@ -10,7 +10,7 @@ typedef enum instruction_e {
 	GET, // 5, USAGE: GET <reg> pushes the value of <reg> to the stack.
 	JMP, // 6, USAGE: JMP <pc val> jump to the PC value <pc val>
 	HLT, // 7, end the program.
-    END // 8, has to be at the end of every program, also ends it.
+	END // 8, has to be at the end of every program, also ends it.
 } Instruction;
 
 typedef enum Regs_e {
@@ -19,11 +19,11 @@ typedef enum Regs_e {
 } Register;
 
 typedef struct emu_s {
-    int *program;
-    int program_size;
-    int stack[256];
-    int registers[REGISTER_NUM];
-    int isRunning;
+	int *program;
+	int program_size;
+	int stack[256];
+	int registers[REGISTER_NUM];
+	int isRunning;
 } EMU_context;
 
 #endif // COMMON_H

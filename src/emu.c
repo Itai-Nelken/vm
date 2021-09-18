@@ -5,65 +5,65 @@
 #include "emu.h"
 
 void progcpy(int *dest, int *src, int dest_size) {
-    while(*src != END && dest_size-- != 0) {
-        *dest++ = *src++;
-    }
+	while(*src != END && dest_size-- != 0) {
+		*dest++ = *src++;
+	}
 }
 
 EMU_context *emu_init(int *prog) {
-    EMU_context *new=malloc(sizeof(EMU_context));
-    new->isRunning=1;
-    new->program_size=getProgSize(prog);
-    new->program=malloc(new->program_size*sizeof(int));
-    progcpy(new->program, prog, new->program_size);
+	EMU_context *new=malloc(sizeof(EMU_context));
+	new->isRunning=1;
+	new->program_size=getProgSize(prog);
+	new->program=malloc(new->program_size*sizeof(int));
+	progcpy(new->program, prog, new->program_size);
 
-    return new;
+	return new;
 }
 
 void EMU_free(EMU_context *c) {
-    free(c->program);
-    free(c);
+	free(c->program);
+	free(c);
 }
 
 int getProgSize(int *prog) {
-    int size;
-    for(size=0; prog[size]!=END; size++);
-    return size;
+	int size;
+	for(size=0; prog[size]!=END; size++);
+	return size;
 }
 
 void run(int *prog) {
-    EMU_context *context=emu_init(prog);
-    int *pc=&(context->registers[PC]);
-    for(*pc=0; *pc<getProgSize(prog) && context->isRunning != 0; ++*pc) {
-        exec(context, prog[*pc]);
-    }
-    EMU_free(context);
+	EMU_context *context=emu_init(prog);
+	int *pc=&(context->registers[PC]);
+	for(*pc=0; *pc<getProgSize(prog) && context->isRunning != 0; ++*pc) {
+		exec(context, prog[*pc]);
+	}
+	EMU_free(context);
 }
 
 void run_from_file(const char *filename) {
-    long size=0;
-    char *buffer;
-    FILE *f=fopen(filename, "r");
-    if(!f) {
-        perror("run_from_file(): fopen()");
-        return;
-    }
+	long size=0;
+	char *buffer;
+	FILE *f=fopen(filename, "r");
+	if(!f) {
+		perror("run_from_file(): fopen()");
+		return;
+	}
 
-    fseek(f, 0, SEEK_END);
-    size=ftell(f);
-    rewind(f);
+	fseek(f, 0, SEEK_END);
+	size=ftell(f);
+	rewind(f);
 
-    buffer=malloc(size*sizeof(char));
-    fread(buffer, sizeof(char), size*sizeof(char), f);
-    fclose(f);
+	buffer=malloc(size*sizeof(char));
+	fread(buffer, sizeof(char), size*sizeof(char), f);
+	fclose(f);
 
-    int x, *prog=malloc(strlen(buffer)*sizeof(int));
-    for(int i=0; i<strlen(buffer); i++) {
-        x=buffer[i]-'0';
-        if(x==-38) continue;
-        prog[i]=x;
-    }
-    run(prog);
-    free(prog);
-    free(buffer);
+	int x, *prog=malloc(strlen(buffer)*sizeof(int));
+	for(int i=0; (size_t)i<strlen(buffer); i++) {
+		x=buffer[i]-'0';
+		if(x==-38) continue;
+		prog[i]=x;
+	}
+	run(prog);
+	free(prog);
+	free(buffer);
 }

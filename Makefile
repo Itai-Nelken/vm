@@ -4,6 +4,10 @@ SRC = $(wildcard src/*.c)
 OBJ = $(SRC:.c=.o)
 BIN ?= vm
 
+ifdef DEBUG
+	CFLAGS += -g -Wextra -Wpedantic
+endif
+
 all: $(BIN)
 
 $(BIN): $(OBJ)
