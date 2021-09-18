@@ -22,6 +22,27 @@ void exec(EMU_context *c, Instruction i) {
 			c->stack[++*sp]=a+b;
 			break;
 		} // make a scope so variables can be defined
+		case SUB: { // SUB
+			int a, b;
+			a=c->stack[(*sp)--];
+			b=c->stack[(*sp)--];
+			c->stack[++*sp]=b-a;
+			break;
+		}
+		case MUL: { // MUL
+			int a, b;
+			a=c->stack[(*sp)--];
+			b=c->stack[(*sp)--];
+			c->stack[++*sp]=a*b;
+			break;
+		}
+		case DIV: { // DIV
+			int a, b;
+			a=c->stack[(*sp)--];
+			b=c->stack[(*sp)--];
+			c->stack[++*sp]=b/a;
+			break;
+		}
 		case SET: { // SET <register> <value>
 			int reg=c->program[++*pc];
 			c->registers[reg]=c->program[++*pc];
@@ -35,6 +56,8 @@ void exec(EMU_context *c, Instruction i) {
 			*pc=val;
 			break;
 		}
+		case NOP: // NOP
+			break;
 		case HLT: // HLT
 		case END: // END
 			c->isRunning=0;

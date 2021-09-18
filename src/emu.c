@@ -69,9 +69,25 @@ void run_from_file(const char *filename) {
 
 	int x, *prog=malloc(strlen(buffer)*sizeof(int));
 	for(int i=0; (size_t)i<strlen(buffer); i++) {
-		x=buffer[i]-'0';
-		if(x==-38) continue;
-		prog[i]=x;
+		switch(buffer[i]) {
+			case 'a':
+			case 'A':
+				prog[i]=NOP;
+				break;
+			case 'b':
+			case 'B':
+				prog[i]=HLT;
+				break;
+			case 'c':
+			case 'C':
+				prog[i]=END;
+				break;
+			default:
+				x=buffer[i]-'0';
+				if(x==-38) continue;
+				prog[i]=x;
+				break;
+		}
 	}
 	run(prog);
 	free(prog);

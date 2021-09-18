@@ -5,12 +5,16 @@ typedef enum instruction_e {
 	PUSH, // 0, USAGE: PUSH <value> push a number to the stack
 	POP, // 1, pop a number from the stack
 	PEEK, // 2, print the head of the stack
-	ADD, // 3, pop 2 values of the stack, add them, and push the result
-	SET, // 4, USAGE: SET <reg> <val>
-	GET, // 5, USAGE: GET <reg> pushes the value of <reg> to the stack.
-	JMP, // 6, USAGE: JMP <pc val> jump to the PC value <pc val>
-	HLT, // 7, end the program.
-	END // 8, has to be at the end of every program, also ends it.
+	ADD, // 3, pop 2 values from the stack, add them, and push the result
+	SUB, // 4, pop 2 values from the stack, substract the LAST PUSHED from the FIRST PUSHED, and push the result. (push 5, push 2, sub == 5 - 2)
+	MUL, // 5, pop 2 values from the stack, multiply them, and push the result
+	DIV, // 6, pop 2 values from the stack, divide the FIRST PUSHED by the LAST PUSHED, and push the result. (push 10, push 2, div == 10 / 2)
+	SET, // 7, USAGE: SET <reg> <val>
+	GET, // 8, USAGE: GET <reg> pushes the value of <reg> to the stack.
+	JMP, // 9, USAGE: JMP <pc val> jump to the PC value <pc val>
+	NOP, // a (10), do nothing.
+	HLT, // b (11), end the program.
+	END // c (12), has to be at the end of every program, also ends it.
 } Instruction;
 
 typedef enum Regs_e {
