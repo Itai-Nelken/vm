@@ -5,6 +5,8 @@ OBJ = $(SRC:.c=.o)
 PREFIX ?= /usr/local
 BIN ?= vm
 
+.PHONY: all clean install uninstall
+
 ifdef DEBUG
 	CFLAGS += -g -Wextra -Wpedantic
 endif
