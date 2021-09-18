@@ -3,15 +3,16 @@ A Virtual Machine with a custom instruction set.
 
 ## Build
 1. Clone this repository.
-2. Open terminal int the repo's folder.
+2. Open terminal in the repo's folder.
 3. Run `make`
 ### Installation
 In the repo's folder run `sudo make install`.
 ### Uninstallation
 In the repo's folder run `sudo make uninstall`.
 
-### Usage
-`vm [-h|-d <vm binary>] <vm binary>`<br>
+## Usage
+`$ vm [-h|-d <vm binary>] <vm binary>`<br>
+**ARGUMENTS:**<br>
 `-d|--disassemble` - dissasemble a "vm binary", the output is printed to `stdout`.<br>
 `-h|--help` - print help.
 
@@ -37,17 +38,17 @@ In the repo's folder run `sudo make uninstall`.
 | NAME | number | DESCRIPTION |
 | :--: | :----: | :---------: |
 | `A` | 0 | General purpose register. |
-| `B` | 1 |General purpose register. |
-| `C` | 2 |General purpose register. |
-| `D` | 3 |General purpose register. |
-| `E` | 4 |General purpose register. |
-| `F` | 5 |General purpose register. |
+| `B` | 1 | General purpose register. |
+| `C` | 2 | General purpose register. |
+| `D` | 3 | General purpose register. |
+| `E` | 4 | General purpose register. |
+| `F` | 5 | General purpose register. |
 | `PC` | 6 |Program Counter/Instruction Pointer (Points to the instruction to execute in the program). |
 | `SP` | 7 |Stack Pointer (points to the stack head) |
 
 ### `JMP` example
 The following program will add 5 and 6, print the result, and jump back to the first instruction (`PUSH 5`, index 0 so `JMP 0`).
-So basically an infinite loop that will add 5 and 6 and print the result.
+Basically an infinite loop that will add 5 and 6 and print the result.
 ```asm
 PUSH 5
 PUSH 6
