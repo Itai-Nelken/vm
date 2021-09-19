@@ -65,7 +65,7 @@ const char *registers[] = {
 	"F",     // 5
 	"PC",    // 6
 	"SP",    // 7
-	"UNKOWN" // 8
+	"UNKNOWN" // 8
 };
 const char *reg2str(Register r) {
 	switch(r) {
