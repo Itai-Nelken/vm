@@ -11,7 +11,7 @@ ifdef DEBUG
 	CFLAGS += -g -Wextra -Wpedantic
 endif
 
-all: $(BIN)
+all: $(BIN) vas
 
 $(BIN): $(OBJ)
 	$(CC) $(CFLAGS) $^ -o $@
@@ -19,11 +19,14 @@ $(BIN): $(OBJ)
 %.o: %.c
 	$(CC) -c $(CFLAGS) $< -o $@
 
+vas: assembler.c # vas = vm assembler
+	$(CC) $(CFLAGS) $^ -o $@
+
 install: all
 	cp $(BIN) $(PREFIX)/bin
 uninstall:
 	rm -f $(PREFIX)/bin/$(BIN)
 
 clean:
-	rm -f $(OBJ) $(BIN)
+	rm -f $(OBJ) $(BIN) vas
 
