@@ -8,3 +8,6 @@
 - Wrote dissasembler.
 - Added command line arguments.
 
+### 19-20/09/2021
+- Wrote a very simple assembler.
+
