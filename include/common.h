@@ -3,19 +3,20 @@
 
 typedef enum instruction_e {
 	PUSH, // 0, USAGE: PUSH <value> push a number to the stack
-	POP, // 1, pop a number from the stack
+	POP,  // 1, pop a number from the stack
 	PEEK, // 2, print the head of the stack
-	ADD, // 3, pop 2 values from the stack, add them, and push the result
-	SUB, // 4, pop 2 values from the stack, substract the LAST PUSHED from the FIRST PUSHED, and push the result. (push 5, push 2, sub == 5 - 2)
-	MUL, // 5, pop 2 values from the stack, multiply them, and push the result
-	DIV, // 6, pop 2 values from the stack, divide the FIRST PUSHED by the LAST PUSHED, and push the result. (push 10, push 2, div == 10 / 2)
-	SET, // 7, USAGE: SET <reg> <val>
+	ADD,  // 3, pop 2 values from the stack, add them, and push the result
+	SUB,  // 4, pop 2 values from the stack, substract the LAST PUSHED from the FIRST PUSHED, and push the result. (push 5, push 2, sub == 5 - 2)
+	MUL,  // 5, pop 2 values from the stack, multiply them, and push the result
+	DIV,  // 6, pop 2 values from the stack, divide the FIRST PUSHED by the LAST PUSHED, and push the result. (push 10, push 2, div == 10 / 2)
+	SET,  // 7, USAGE: SET <reg> <val>
 	PSET, // 8, USAGE: PSET <reg> pop the stack head and store the value in <reg>.
-	GET, // 9, USAGE: GET <reg> pushes the value of <reg> to the stack.
-	JMP, // a (10), USAGE: JMP <pc val> jump to the PC value <pc val>
-	NOP, // b (11), do nothing.
-	HLT, // c (12), end the program.
-	END // d (13), has to be at the end of every program, also ends it.
+	GET,  // 9, USAGE: GET <reg> pushes the value of <reg> to the stack.
+	JMP,  // a (10), USAGE: JMP <pc val> jump to the PC value <pc val>
+	MOV,  // b (11), USAGE: MOV <reg1> <reg2> move the value in <reg2> into <reg1>
+	NOP,  // c (12), do nothing.
+	HLT,  // d (13), end the program.
+	END   // e (14), has to be at the end of every program, also ends it.
 } Instruction;
 
 typedef enum Regs_e {

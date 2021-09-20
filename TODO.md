@@ -5,7 +5,7 @@ add instructions
 -----------------
 - [ ] `JEQ <reg> <val> <pc val>` - jump if equal (jump to `<pc val>` if the value in `<reg>` == `<val>`).
 - [ ] `JNE <reg> <val> <pc val>` - jump if not equal (jump to `<pc val>` if the value in `<reg>` != `<val>`).
-- [ ] `MOV <reg1> <reg2>` - move the value of `<reg2>` to `<reg1>`.
+- [x] `MOV <reg1> <reg2>` - move the value of `<reg2>` to `<reg1>`.
 
 assembler
 ---------

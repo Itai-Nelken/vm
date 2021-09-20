@@ -16,10 +16,11 @@ const char *instrutions[] = {
 	"PSET",  // 8
 	"GET",   // 9
 	"JMP",   // 10
-	"NOP",   // 11
-	"HLT",   // 12
-	"END",   // 13
-	"UNKOWN" // 14
+	"MOV",   // 11
+	"NOP",   // 12
+	"HLT",   // 13
+	"END",   // 14
+	"UNKOWN" // 15
 };
 const char *instr2str(Instruction i) {
 	switch(i) {
@@ -45,14 +46,16 @@ const char *instr2str(Instruction i) {
 			return instrutions[9];
 		case JMP:
 			return instrutions[10];
-		case NOP:
+		case MOV:
 			return instrutions[11];
-		case HLT:
+		case NOP:
 			return instrutions[12];
-		case END:
+		case HLT:
 			return instrutions[13];
-		default:
+		case END:
 			return instrutions[14];
+		default:
+			return instrutions[15];
 	}
 }
 
@@ -146,6 +149,12 @@ void exec(EMU_context *c, Instruction i) {
 		case JMP: { // JMP <pc value>
 			int val=c->program[++*pc]-1; // has to be 1 less than what is requested because loop in emu.c -> run() increments it.
 			*pc=val;
+			break;
+		}
+		case MOV: {
+			Register dest=c->program[++*pc];
+			Register src=c->program[++*pc];
+			c->registers[dest]=c->registers[src];
 			break;
 		}
 		case NOP: // do nothing

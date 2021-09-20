@@ -67,14 +67,18 @@ void run_from_file(const char *filename) {
 				break;
 			case 'b':
 			case 'B':
-				prog[i]=NOP;
+				prog[i]=MOV;
 				break;
 			case 'c':
 			case 'C':
-				prog[i]=HLT;
+				prog[i]=NOP;
 				break;
 			case 'd':
 			case 'D':
+				prog[i]=HLT;
+				break;
+			case 'e':
+			case 'E':
 				prog[i]=END;
 				break;
 			default:

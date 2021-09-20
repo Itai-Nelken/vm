@@ -24,6 +24,9 @@ void disassemble(int *prog) {
 		} else if(!strcmp(instr, "SET")) {
 			int reg=prog[++i];
 			printf("%s %s %d\n", instr, reg2str(reg), prog[++i]);
+		} else if(!strcmp(instr, "MOV")) {
+			int dest_reg=prog[++i];
+			printf("%s %s %s\n", instr, reg2str(dest_reg), reg2str(prog[++i]));
 		} else if(!strcmp(instr, "PSET")||!strcmp(instr, "GET")) {
 			printf("%s %s\n", instr, reg2str(prog[++i]));
 		} else {
@@ -59,14 +62,18 @@ void disassembleFromFile(const char *filename) {
 				break;
 			case 'b':
 			case 'B':
-				prog[i]=NOP;
+				prog[i]=MOV;
 				break;
 			case 'c':
 			case 'C':
-				prog[i]=HLT;
+				prog[i]=NOP;
 				break;
 			case 'd':
 			case 'D':
+				prog[i]=HLT;
+				break;
+			case 'e':
+			case 'E':
 				prog[i]=END;
 				break;
 			default:

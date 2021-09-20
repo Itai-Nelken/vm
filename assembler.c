@@ -74,14 +74,14 @@ int assemble(const char *infile, const char *outfile) {
 				fprintf(out, "6");
 				continue;
 			} else if(!strcasecmp(bp, "NOP")) {
-				fprintf(out, "b");
+				fprintf(out, "c");
 				continue;
 			} else if(!strcasecmp(bp, "HLT")) {
-				fprintf(out, "c");
+				fprintf(out, "d");
 				continue;
 			} else if(!strcasecmp(bp, "END")) {
 				was_end=1;
-				fprintf(out, "d");
+				fprintf(out, "e");
 				continue;
 			} else if(!strcasecmp(bp, "PUSH")) { // single argument instructions
 				bp=strtok(NULL, separator);
@@ -145,6 +145,23 @@ int assemble(const char *infile, const char *outfile) {
 					goto cleanup;
 				}
 				fprintf(out, "7%d%d", reg, atoi(bp));
+			} else if(!strcasecmp(bp, "MOV")) {
+				int dest_reg, src_reg;
+				bp=strtok(NULL, separator);
+				if(bp==NULL) {
+					fprintf(stderr, "ERROR: line %d: instruction 'MOV' requires 2 arguments!\n", line);
+					ret_val=1;
+					goto cleanup;
+				}
+				dest_reg=str2reg(bp);
+				bp=strtok(NULL, separator);
+				if(bp==NULL) {
+					fprintf(stderr, "ERROR: line %d: instruction 'MOV' requires another argument!\n", line);
+					ret_val=1;
+					goto cleanup;
+				}
+				src_reg=str2reg(bp);
+				fprintf(out, "b%d%d", dest_reg, src_reg);
 			} else {
 				fprintf(stderr, "ERROR: unknown instruction \"%s\" in line %d!\n", bp, line);
 				ret_val=1;
@@ -154,7 +171,7 @@ int assemble(const char *infile, const char *outfile) {
 	}
 
 	if(was_end==0) {
-		fprintf(out, "d\n");
+		fprintf(out, "e\n");
 	}
 
 cleanup:

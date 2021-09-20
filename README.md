@@ -36,9 +36,10 @@ In the repo's folder run `sudo make uninstall`.
 | PSET | 8 | `PSET <register>` | Pop the stack head and store the value in `<register>` |
 | GET | 9 | `GET <register>` | Push the value of `<register>` to the stack. |
 | JMP | a | `JMP <instruction index>` | Jump to the instruction `<instruction index>`. see "`JMP` example" bellow. |
-| NOP | b | `NOP` | Do nothing. |
-| HLT | c | `HLT` | End the program. |
-| END | d | `END` | Has to be at the end of every program. |
+| MOV | b | `MOV <reg1> <reg2>` | Move the value in `<reg2>` to `<reg1>`. |
+| NOP | c | `NOP` | Do nothing. |
+| HLT | d | `HLT` | End the program. |
+| END | e | `END` | Has to be at the end of every program. |
 
 ## Registers
 | NAME | number | DESCRIPTION |
