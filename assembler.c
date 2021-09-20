@@ -145,7 +145,7 @@ int main(int argc, char **argv) {
 	while((opt=getopt(argc, argv, "o:h")) != -1) {
 		switch(opt) {
 			case 'h':
-				printf("USAGE %s <infile> [-o|h|v]\n  -o <outfile> : name to use for output file, default is 'as.out.vm'.\n  -h : this help.\n", argv[0]);
+				printf("USAGE %s <infile> [-o <output file>|-h]\n  -o <outfile> : name to use for output file, default is 'as.out.vm'.\n  -h : this help.\n", argv[0]);
 				ret_val=1;
 				goto clean;
 			case 'o':

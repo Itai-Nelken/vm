@@ -10,11 +10,17 @@ In the repo's folder run `sudo make install`.
 ### Uninstallation
 In the repo's folder run `sudo make uninstall`.
 
-## Usage
+## VM usage
 `$ vm [-h|-d <vm binary>] <vm binary>`<br>
 **ARGUMENTS:**<br>
-`-d|--disassemble` - dissasemble a "vm binary", the output is printed to `stdout`.<br>
+`-d|--disassemble` - Dissasemble a "vm binary", the output is printed to `stdout`.<br>
 `-h|--help` - print help.
+
+## Assembler (`vas`) usage
+`$ vas <infile> [-o <output file>|-h]`<br>
+**ARGUMENTS:**<br>
+`-o <output file>` - Name of the output file. Default is `as.out.vm`.<br>
+`-h` - Print help.
 
 ## Instruction table
 | NAME | OPCODE | USAGE | DESCRIPTION |
