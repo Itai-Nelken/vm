@@ -85,17 +85,32 @@ int assemble(const char *infile, const char *outfile) {
 				continue;
 			} else if(!strcasecmp(bp, "PUSH")) { // single argument instructions
 				bp=strtok(NULL, separator);
+				if(bp==NULL) {
+					fprintf(stderr, "ERROR: line %d: instruction 'JMP' requires an argument!\n", line);
+					ret_val=1;
+					goto cleanup;
+				}
 				fprintf(out, "0%d", atoi(bp));
 				continue;
 			} else if(!strcasecmp(bp, "JMP")) {
 				bp=strtok(NULL, separator);
+				if(bp==NULL) {
+					fprintf(stderr, "ERROR: line %d: instruction 'JMP' requires an argument!\n", line);
+					ret_val=1;
+					goto cleanup;
+				}
 				fprintf(out, "a%d", atoi(bp));
 				continue;
 			} else if(!strcasecmp(bp, "PSET")) {
 				bp=strtok(NULL, separator);
+				if(bp==NULL) {
+					fprintf(stderr, "ERROR: line %d: instruction 'PSET' requires an argument!\n", line);
+					ret_val=1;
+					goto cleanup;
+				}
 				int reg=str2reg(bp);
 				if(reg==-1) {
-					fprintf(stderr, "ERROR: register '%s' doesn't exist!\n", bp);
+					fprintf(stderr, "ERROR: line %d: 'PSET' argument: register '%s' doesn't exist!\n", line, bp);
 					ret_val=1;
 					goto cleanup;
 				}
@@ -103,6 +118,11 @@ int assemble(const char *infile, const char *outfile) {
 				continue;
 			} else if(!strcasecmp(bp, "GET")) {
 				bp=strtok(NULL, separator);
+				if(bp==NULL) {
+					fprintf(stderr, "ERROR: line %d: instruction 'GET' requires an argument!\n", line);
+					ret_val=1;
+					goto cleanup;
+				}
 				int reg=str2reg(bp);
 				if(reg==-1) {
 					fprintf(stderr, "ERROR: register '%s' doesn't exist!\n", bp);
@@ -112,8 +132,18 @@ int assemble(const char *infile, const char *outfile) {
 				fprintf(out, "9%d", reg);
 			} else if(!strcasecmp(bp, "SET")) { // 2 argument instructions
 				bp=strtok(NULL, separator);
+				if(bp==NULL) {
+					fprintf(stderr, "ERROR: line %d: instruction 'SET' requires 2 arguments!\n", line);
+					ret_val=1;
+					goto cleanup;
+				}
 				int reg=str2reg(bp);
 				bp=strtok(NULL, separator);
+				if(bp==NULL) {
+					fprintf(stderr, "ERROR: line %d: instruction 'SET' requires another argument!\n", line);
+					ret_val=1;
+					goto cleanup;
+				}
 				fprintf(out, "7%d%d", reg, atoi(bp));
 			} else {
 				fprintf(stderr, "ERROR: unknown instruction \"%s\" in line %d!\n", bp, line);
