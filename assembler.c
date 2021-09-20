@@ -137,7 +137,7 @@ cleanup:
 
 
 int main(int argc, char **argv) {
-	if(argc < 2) ERROR(1, "ERROR: no arguments provided!\n");
+	if(argc < 2) ERROR(1, "ERROR: no arguments provided!\nUse \"-h\" argument for help.\n");
 	int opt, ret_val=0;
 	char *outfile=NULL, *infile=malloc(strlen(argv[1])*sizeof(char)+1);
 	strncpy(infile, argv[1], strlen(argv[1])*sizeof(char)+1);

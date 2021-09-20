@@ -79,7 +79,6 @@ void run_from_file(const char *filename) {
 				break;
 			default:
 				x=buffer[i]-'0';
-				if(x==-38) continue;
 				prog[i]=x;
 				break;
 		}
