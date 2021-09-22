@@ -6,8 +6,10 @@ OBJ = $(SRC:.c=.o)
 BIN := vm
 DEBUG ?= 0
 VERBOSE ?= 0
-ifneq (DEBUG, 0)
-	CFLAGS += -g
+
+ifeq (DEBUG, 1)
+	@echo "compiling with debug symbols"
+	CFLAGS+= -g
 endif
 
 # verbosity for CC

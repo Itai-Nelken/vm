@@ -183,16 +183,16 @@ void disassemble(FILE *in) {
                 printf("\t0x%X DIV\n", DIV);
                 break;
             case SET:
-                printf("\t0x%X SET %s %d\n", SET, reg2str(op.arg1), op.arg2);
+                printf("\t0x%X SET R%s %d\n", SET, reg2str(op.arg1), op.arg2);
                 break;
             case PSET:
-                printf("\t0x%X PSET %s\n", PSET, reg2str(op.arg1));
+                printf("\t0x%X PSET R%s\n", PSET, reg2str(op.arg1));
                 break;
             case GET:
-                printf("\t0x%X GET %s\n", GET, reg2str(op.arg1));
+                printf("\t0x%X GET R%s\n", GET, reg2str(op.arg1));
                 break;
             case MOV:
-                printf("\t0x%X MOV %s %s\n", MOV, reg2str(op.arg1), reg2str(op.arg2));
+                printf("\t0x%X MOV R%s R%s\n", MOV, reg2str(op.arg1), reg2str(op.arg2));
                 break;
             case JMP:
                 printf("\t0x%X JMP %d\n", JMP, op.arg1);
