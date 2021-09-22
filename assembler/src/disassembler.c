@@ -147,8 +147,12 @@ void disassemble(FILE *in) {
     struct operation op;
     int exit=0;
 
+    fread(&op, sizeof(struct operation), 1, in);
+    if(op.instruction != -1) {
+    	fprintf(stderr, "ERROR: unrecognized binary format!\n");
+	return;
+    }
     while(exit==0 && !feof(in)) {
-        fread(&op, sizeof(struct operation), 1, in);
         switch(op.instruction) {
             case S_START:
                 printf("START:\n");
@@ -215,5 +219,6 @@ void disassemble(FILE *in) {
                 printf("\tUNKOWN\n");
                 break;
         }
+        fread(&op, sizeof(struct operation), 1, in);
     }
 }
