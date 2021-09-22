@@ -3,7 +3,7 @@ LD := gcc
 CFLAGS = -Wall -Iinclude
 SRC = $(wildcard src/*.c)
 OBJ = $(SRC:.c=.o)
-BIN := vm
+BIN := vas
 DEBUG ?= 0
 VERBOSE ?= 0
 ifneq (DEBUG, 0)
@@ -21,6 +21,8 @@ REAL_LD := $(LD)
 LD_0 = @echo "LD $^"; $(REAL_LD)
 LD_1 = $(REAL_LD)
 LD = $(LD_$(VERBOSE))
+
+.PHONY: all clean
 
 all: $(BIN)
 

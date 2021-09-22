@@ -11,3 +11,10 @@
 ### 19-20/09/2021
 - Wrote a very simple assembler.
 
+### 21/09/2021
+- Changed binary format to real binary.
+- Wrote a new disassembler.
+- Started writing a proper assembler.
+
+### 22/09/2021
+- Finish the new assembler.
