@@ -37,3 +37,11 @@ void strzero(char *s) {
         *s=0;
     }
 }
+
+void leftShift(char *s) {
+    for(int i = 1; i < strlen(s); i++) {
+        s[i - 1] = s[i];
+    }
+    s[strlen(s)-1]='\0';
+}
+

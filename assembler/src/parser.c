@@ -80,10 +80,6 @@ int parse(const char *infile, const char *outfile) {
                 t.token=t.value;
                 break;
             case T_REG:
-                // if only 'R' is provided
-                if(!t.value) {
-                    break;     
-                }
                 // if register doesn't exist
                 if(!strcmp(reg2str(t.value), "UNKNOWN")) {
                     fprintf(stderr, "WARNING: line %d: register doesn't exist!\n", c->infileLine);
@@ -128,9 +124,11 @@ int parse(const char *infile, const char *outfile) {
     } while(1);
     if(state==-1) {
         fprintf(stderr, "ERROR: syntax error in line %d!\n", c->infileLine);
+        remove(outfile);
         ret_val=1;
     } else if(isWaiting!=0) {
         fprintf(stderr, "ERROR: line %d: waiting for argument but file ended!\n", isWaiting);
+        remove(outfile);
         ret_val=1;
     }
 

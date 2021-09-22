@@ -21,6 +21,15 @@ const char *instr2str(Instruction i);
 const char *reg2str(Register r);
 
 /******
+ * Return the enum value of the name of the register reg or -1 if it doesn't exist.
+ * 
+ * @param reg String containig the register name.
+ * 
+ * @return The value of the register in the enum.
+ ******/
+int str2reg(const char *reg);
+
+/******
  * Disassemble a VM binary and print the output to stdout.
  * 
  * @param in An open file handle.

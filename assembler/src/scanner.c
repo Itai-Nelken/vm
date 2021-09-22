@@ -5,6 +5,7 @@
 #include "common.h"
 #include "utilities.h"
 #include "scanner.h"
+#include "disassembler.h"
 
 SCANNERcontext *scannerInit() {
     SCANNERcontext *context=malloc(sizeof(SCANNERcontext));
@@ -117,7 +118,8 @@ int nextToken(SCANNERcontext *context, struct token *t) {
         t->value=HLT;
     } else if(tolower(p[0])=='r') {
         t->token=T_REG;
-        t->value=p[1];
+        leftShift(p);
+        t->value=str2reg(p);
     } else if(!strcasecmp(p, "SP")) {
         t->token=T_REG;
         t->value=SP;

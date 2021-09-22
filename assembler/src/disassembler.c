@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <string.h>
+#include <ctype.h>
 #include "common.h"
 #include "disassembler.h"
 
@@ -97,25 +99,48 @@ const char *registers[] = {
 };
 const char *reg2str(Register r) {
 	switch(r) {
-		case A:
+		case A: // 0
 			return registers[A];
-		case B:
+		case B: // 1
 			return registers[B];
-		case C:
+		case C: // 2
 			return registers[C];
-		case D:
+		case D: // 3
 			return registers[D];
-		case E:
+		case E: // 4
 			return registers[E];
-		case F:
+		case F: // 5
 			return registers[F];
-		case SP:
+		case SP: // 6
 			return registers[SP];
-		case PC:
+		case PC: // 7
 			return registers[PC];
 		default:
 			return registers[8];
 	}
+}
+int str2reg(const char *reg) {
+    if(!strcasecmp(reg, "SP")) {
+        return SP;
+    } else if(!strcasecmp(reg, "PC")) {
+        return PC;
+    }
+    switch(tolower(reg[0])) {
+        case 'a':
+            return A;
+        case 'b':
+            return B;
+        case 'c':
+            return C;
+        case 'd':
+            return D;
+        case 'e':
+            return E;
+        case 'f':
+            return F;
+        default:
+            return -1;
+    }
 }
 
 void disassemble(FILE *in) {

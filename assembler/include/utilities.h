@@ -27,4 +27,11 @@ int str2int(char *s);
  ******/
 void strzero(char *s);
 
+/******
+ * Shift the characters in a string one character left. "abcd" -> "bcd"
+ * 
+ * @param s A pointer to the string.
+ ******/
+void leftShift(char *s);
+
 #endif // UTILS_H
