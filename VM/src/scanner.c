@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "common.h"
 #include "utilities.h"
 #include "scanner.h"
@@ -114,24 +115,9 @@ int nextToken(SCANNERcontext *context, struct token *t) {
     } else if(!strcasecmp(p, "HLT")) {
         t->token=T_INSTR;
         t->value=HLT;
-    } else if(!strcasecmp(p, "A")) { // registers
+    } else if(tolower(p[0])=='r') {
         t->token=T_REG;
-        t->value=A;
-    } else if(!strcasecmp(p, "B")) {
-        t->token=T_REG;
-        t->value=B;
-    } else if(!strcasecmp(p, "C")) {
-        t->token=T_REG;
-        t->value=C;
-    } else if(!strcasecmp(p, "D")) {
-        t->token=T_REG;
-        t->value=D;
-    } else if(!strcasecmp(p, "E")) {
-        t->token=T_REG;
-        t->value=E;
-    } else if(!strcasecmp(p, "F")) {
-        t->token=T_REG;
-        t->value=F;
+        t->value=p[1];
     } else if(!strcasecmp(p, "SP")) {
         t->token=T_REG;
         t->value=SP;

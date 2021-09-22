@@ -11,82 +11,85 @@ void tokcpy(struct token *dest, struct token *src) {
     dest->value=src->value;
 }
 
-int parse(const char *filename) {
-    int ret_val=0, tok_ret, getNext=1;
-    struct token t, tmp, tmp2;
-    SCANNERcontext *c=scannerInit();
-    c->infile=fopen(filename, "r");
-    while(1) {
-        if(getNext==1) {
-            tok_ret=nextToken(c, &t);
-            if(tok_ret==2 || tok_ret==1) break;
-            else if(tok_ret==3) continue;
-        } else {
-            if(getNext==0) {
-                tokcpy(&t, &tmp);
-                getNext=1;
-            } else if(getNext==-1) {
-                tokcpy(&t, &tmp);
-                tokcpy(&tmp, &tmp2);
-                getNext=0;
-            }
-        }
+const int table[20][8]= {
+//  0   1   2   3   4   5   6   7
+   {1, -1, -1, -1, -1, -1, -1, -1}, // 0
+   {0, -1, -1, -1, -1, -1, -1, -1}, // 1
+   {0, -1, -1, -1, -1, -1, -1, -1}, // 2
+   {0, -1, -1, -1, -1, -1, -1, -1}, // 3
+   {0, -1, -1, -1, -1, -1, -1, -1}, // 4
+   {0, -1, -1, -1, -1, -1, -1, -1}, // 5
+   {0, -1, -1, -1, -1, -1, -1, -1}, // 6
+   {2, -1, -1, -1, -1, -1, -1, -1}, // 7
+   {3, -1, -1, -1, -1, -1, -1, -1}, // 8
+   {3, -1, -1, -1, -1, -1, -1, -1}, // 9
+   {4, -1, -1, -1, -1, -1, -1, -1}, // 10
+   {5, -1, -1, -1, -1, -1, -1, -1}, // 11
+   {5, -1, -1, -1, -1, -1, -1, -1}, // 12
+   {5, -1, -1, -1, -1, -1, -1, -1}, // 13
+   {5, -1, -1, -1, -1, -1, -1, -1}, // 14
+   {5, -1, -1, -1, -1, -1, -1, -1}, // 15
+   {0, -1, -1, -1, -1, -1, -1, -1}, // 16
+   {0, -1, -1, -1, -1, -1, -1, -1}, // 17
+  {-1, -1,  6,  0,  7, -1, -1,  0}, // 18
+  {-1,  0, -1, -1, -1,  0,  0, -1}  // 19
+};
 
-        if(t.token == T_INSTR) {
-            switch(t.value) {
-                // single argument instructions
-                case PUSH: // int
-                case PSET: // register
-                case GET: // register
-                case JMP: // int
-                case JEQ: // int
-                case JNE: // int
-                case JLT: // int
-                case JGT: // int
-                    // check single argument
-                    if(nextToken(c, &tmp)!=0) {
-                        fprintf(stderr, "ERROR: instruction '%s' requires an argument!\n", instr2str(t.value));
-                        ret_val=1;
-                        goto cleanup;
-                    } else {
-                        getNext=0;
-                    }
-                    break;
-                // 2 argument instructions
-                case SET: // register int
-                case MOV: // register register
-                    // check 2 arguments
-                    if(nextToken(c, &tmp)!=0) {
-                        fprintf(stderr, "ERROR: instruction '%s' requires 2 arguments!\n", instr2str(t.value));
-                        ret_val=1;
-                        goto cleanup;
-                    } else {
-                        if(nextToken(c, &tmp2)!=0) {
-                            fprintf(stderr, "ERROR: instruction '%s' requires another argument!\n", instr2str(t.value));
-                            ret_val=1;
-                            goto cleanup;
-                        }
-                        getNext=-1;
-                    }
-                    break;
-                default:
-                    break;
-                    
-            }
-        } else if(t.token == T_REG) {
-            // move register checking to here.
-            // and change register syntax to 'r<reg>'
-        } else if(t.token == T_INT) {
-            // nothing to do :)
+int parse(const char *infile) {
+    int state=0, tmp, ret_val=0, isWaiting=0;
+    struct token t, t2;
+    SCANNERcontext *c=scannerInit();
+    c->infile=fopen(infile, "rb");
+
+    do {
+        tmp=nextToken(c, &t);
+        if(tmp==2 || tmp==1) break;
+        if(tmp==3)  {
+            continue;
         }
+        tokcpy(&t2, &t);
+        switch(t.token) {
+            case T_INSTR:
+                t.token=t2.value;
+                break;
+            case T_REG:
+                // if only 'R' is provided
+                if(!t.value) {
+                    break;     
+                }
+                // if register doesn't exist
+                if(!strcmp(reg2str(t.value), "UNKNOWN")) {
+                    fprintf(stderr, "WARNING: line %d: register doesn't exist!\n", c->infileLine);
+                }
+                t.token=18;
+                break;
+            case T_INT:
+                t.token=19;
+                break;
+        }
+        if((state=table[t.token][state]) == -1) {
+            tokcpy(&t, &t2);
+            break;
+        }
+        // if state != 0 (meaning that there is another argument, set isWaiting to the current line).
+        // we can then use isWaiting to check if an argument wasn't provided in cases where the state table
+        // doesn't (like the file ended). the line is so we can print in what line the error is.
+        if(state!=0) isWaiting=c->infileLine;
+        if(state==0) isWaiting=0;
+
+    } while(1);
+    if(state==-1) {
+        fprintf(stderr, "ERROR: syntax error in line %d!\n", c->infileLine);
+        ret_val=1;
+    } else if(isWaiting!=0) {
+        fprintf(stderr, "ERROR: line %d: waiting for argument but file ended!\n", isWaiting);
+        ret_val=1;
     }
 
-cleanup:
     fclose(c->infile);
     scannerDestroy(c);
     return ret_val;
 }
-
 
 int main(int argc, char **argv) {
     return parse("in.asm");
@@ -96,6 +99,7 @@ int main(int argc, char **argv) {
 // add static once this function is used.
 /* static */void disassembler(const char *binaryname) {
     FILE *in=fopen(binaryname, "rb");
+    printf("\033[1mFILE: %s\033[0m\n\n", binaryname);
     disassemble(in);
     fclose(in);
 }
