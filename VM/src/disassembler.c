@@ -148,7 +148,7 @@ void disassemble(FILE *in) {
                 printf("\t0x%X SUB\n", SUB);
                 break;
             case MUL:
-                printf("\t0x%XMUL\n", MUL);
+                printf("\t0x%X MUL\n", MUL);
                 break;
             case DIV:
                 printf("\t0x%X DIV\n", DIV);
