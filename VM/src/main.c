@@ -12,8 +12,10 @@ int main(void) {
     stackPush(stack, registersGet(regs, A));
     stackPush(stack, registersGet(regs, B));
 
+    puts("--------");
     stackDump(stack);
-
+    puts("--------");
+    registersDump(regs);
     stackDestroy(stack);
     registersDestroy(regs);
     return 0;

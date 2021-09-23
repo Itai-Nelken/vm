@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include "common.h"
 #include "registers.h"
@@ -64,4 +65,8 @@ int registersGet(REGScontext *c, Register r) {
         default:
             return -1;
     }
+}
+
+void registersDump(REGScontext *c) {
+    printf("A: %d\nB: %d\nC: %d\nD: %d\nE: %d\nF: %d\nSP: %d\nPC: %d\n", c->A, c->B, c->C, c->D, c->E, c->F, c->SP, c->PC);
 }

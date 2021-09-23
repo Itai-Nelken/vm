@@ -22,7 +22,7 @@ typedef enum instructions {
     JEQ,  // 12 | 1 argument
     JNE,  // 13 | 1 argument
     JLT,  // 14 | 1 argument
-    JGE,  // 15 | 1 argument
+    JGT,  // 15 | 1 argument
     NOP,  // 16 | 0 argument
     HLT   // 17 | 0 argument
 } Instruction;

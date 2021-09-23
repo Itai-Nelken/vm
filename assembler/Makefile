@@ -3,6 +3,7 @@ LD := gcc
 CFLAGS = -Wall -Iinclude
 SRC = $(wildcard src/*.c)
 OBJ = $(SRC:.c=.o)
+#OBJ = $(addprefix $(shell pwd)/, $(notdir $(SRC:.c=.o)))
 BIN := vas
 DEBUG ?= 0
 VERBOSE ?= 0
@@ -29,7 +30,7 @@ all: $(BIN)
 $(BIN): $(OBJ)
 	$(LD) $(CFLAGS) $^ -o $@
 
-%.o: %.c
+%.o: %c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:

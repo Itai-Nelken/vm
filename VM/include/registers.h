@@ -40,4 +40,11 @@ int registersSet(REGScontext *c, Register r, int data);
  ******/
 int registersGet(REGScontext *c, Register r);
 
+/******
+ * Print the contents of all registers.
+ * 
+ * @param c An initialized registers context.
+ ******/
+void registersDump(REGScontext *c);
+
 #endif // REGISTERS_H

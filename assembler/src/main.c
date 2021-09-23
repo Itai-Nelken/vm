@@ -5,11 +5,16 @@
 #include "disassembler.h"
 #include "parser.h"
 
-static void disassembler(const char *binaryname) {
+static int disassembler(const char *binaryname) {
     FILE *in=fopen(binaryname, "rb");
+    if(!in) {
+	perror("disassembler(): fopen()");
+	return 1;
+    }
     printf("\033[1mFILE: %s\033[0m\n\n", binaryname);
     disassemble(in);
     fclose(in);
+    return 0;
 }
 
 void print_help(const char *progname) {
@@ -44,7 +49,8 @@ int main(int argc, char **argv) {
                 outfile=optarg;
                 break;
             case 'd':
-                disassembler(optarg);
+		// return 1 if disassembler succeds, 1 if it fails
+                ret_val=disassembler(optarg)==0 ? 0 : 1;
                 exit=1;
                 break;
             case 'h':
@@ -62,33 +68,3 @@ int main(int argc, char **argv) {
     return ret_val;
 }
 
-/*
-struct token t;
-    SCANNERcontext *c=scannerInit();
-    c->infile=fopen("/Users/itai/Desktop/VM/in.asm", "r");
-    int tmp;
-    while(1) {
-        tmp=nextToken(c, &t);
-        if(tmp==2 || tmp==1) break;
-        else if(tmp==3) continue;
-
-        if(t.token==T_INSTR) {
-            switch(t.value) {
-                case PUSH:
-                    printf("PUSH");
-                    break;
-                case PEEK:
-                    printf("PEEK\n");
-                    break;
-                case ADD:
-                    printf("ADD\n");
-                    break;
-            }
-            fflush(stdout);
-        } else if(t.token==T_INT) {
-            printf(" %d\n", t.value);
-        }
-    }
-    fclose(c->infile);
-    scannerDestroy(c);
-*/
