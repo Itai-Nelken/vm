@@ -1,6 +1,10 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#ifndef STACK_SIZE
+#define STACK_SIZE 256 // The stack is an array of ints, so 256*4 == 1024 bytes (1kb) (sizeof(int)==4 bytes)
+#endif
+
 // Symbols
 #define S_START -1
 #define S_END -2
