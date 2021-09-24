@@ -1,27 +1,6 @@
 # vm
 A Virtual Machine with a custom instruction set.
 
-## Build
-1. Clone this repository.
-2. Open terminal in the repo's folder.
-3. Run `make`
-### Installation
-In the repo's folder run `sudo make install`.
-### Uninstallation
-In the repo's folder run `sudo make uninstall`.
-
-## VM usage
-`$ vm [-h|-d <vm binary>] <vm binary>`<br>
-**ARGUMENTS:**<br>
-`-d|--disassemble` - Dissasemble a "vm binary", the output is printed to `stdout`.<br>
-`-h|--help` - print help.
-
-## Assembler (`vas`) usage
-`$ vas <infile> [-o <output file>|-h]`<br>
-**ARGUMENTS:**<br>
-`-o <output file>` - Name of the output file. Default is `as.out.vm`.<br>
-`-h` - Print help.
-
 ## Instruction table
 | NAME | OPCODE | USAGE | DESCRIPTION |
 | :---: | :---: | :---: | :---: |
@@ -35,11 +14,14 @@ In the repo's folder run `sudo make uninstall`.
 | SET | 7 | `SET <register> <value>` | Set `<register>` to `<value>`. |
 | PSET | 8 | `PSET <register>` | Pop the stack head and store the value in `<register>` |
 | GET | 9 | `GET <register>` | Push the value of `<register>` to the stack. |
-| JMP | a | `JMP <instruction index>` | Jump to the instruction `<instruction index>`. see "`JMP` example" bellow. |
-| MOV | b | `MOV <reg1> <reg2>` | Move the value in `<reg2>` to `<reg1>`. |
-| NOP | c | `NOP` | Do nothing. |
-| HLT | d | `HLT` | End the program. |
-| END | e | `END` | Has to be at the end of every program. |
+| JMP | 10 | `JMP <pc value>` | Jump to the instruction in `<pc value>`. |
+| JEQ | 11 | `JEQ <pc value>` | Pop 2 values of the stack, compare them, and jump to `<pc value>` if they are equal. |
+| JNE | 12 | `JNE <pc value>` | Pop 2 values of the stack, compare them, and jump to `<pc value>` if they are NOT equal. |
+| JLT | 13 | `JLT <pc value>` | Pop 2 values of the stack, compare them, and jump to `<pc value>` if the FIRST value pushed to the stack is SMALLER than the second. |
+| JGT | 14 | `JGT <pc value>` | Pop 2 values of the stack, compare them, and jump to `<pc value>` if the FIRST value pushed to the stack is LARGER than the second. |
+| MOV | 15 | `MOV <reg1> <reg2>` | Move the value in `<reg2>` to `<reg1>`. |
+| NOP | 16 | `NOP` | Do nothing. |
+| HLT | 17 | `HLT` | End the program. |
 
 ## Registers
 | NAME | number | DESCRIPTION |
@@ -50,46 +32,25 @@ In the repo's folder run `sudo make uninstall`.
 | `D` | 3 | General purpose register. |
 | `E` | 4 | General purpose register. |
 | `F` | 5 | General purpose register. |
-| `PC` | 6 |Program Counter/Instruction Pointer (Points to the instruction to execute in the program). |
-| `SP` | 7 |Stack Pointer (points to the stack head) |
+| `SP` | 6 | Stack Pointer (points to the stack head). |
+| `PC` | 7 | Program Counter/Instruction Pointer (Points to the instruction to execute in the program). |
 
-### `JMP` example
-The following program will add 5 and 6, print the result, and jump back to the first instruction (`PUSH 5`, index 0 so `JMP 0`).
-Basically an infinite loop that will add 5 and 6 and print the result.
-```asm
-PUSH 5
-PUSH 6
-ADD
-PEEK
-POP
-JMP 0
-END
-```
-### 5+6 example
-```asm
-PUSH 5
-PUSH 6
-ADD
-PEEK
-POP
-END
-```
-### Register usage example with (5 + 2) * (2 + 5)
-```asm
-PUSH 5
-PUSH 2
-ADD
-PSET A
 
-PUSH 2
-PUSH 5
-ADD
+### Example: (5 + 2) * (2 + 5)
+```asm
+push 5
+push 2
+add
+pset Ra
+
+push 2
+push 5
+add
 ; The result is already on the stack, so no need to save it.
 
-GET A
-MUL
+get Ra
+mul
 
-PEEK
-POP ; pop isn't necessary here as its the end of the program
-; you could put END here, if you don't the assembler will do it.
+peek
+pop ; pop isn't necessary here as its the end of the program
 ```
