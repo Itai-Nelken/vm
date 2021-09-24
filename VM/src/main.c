@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include "common.h"
 #include "vm.h"
 #include "list.h"
 
@@ -10,4 +9,3 @@ int main(void) {
     vmDestroy(vm);
     return 0;
 }
-

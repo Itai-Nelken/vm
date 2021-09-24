@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct t {
+typedef struct node {
 	int val;
-	struct t *next;
+	struct node *next;
 } node;
 
 void insert(node **head, int val) {
@@ -24,7 +24,6 @@ void insert(node **head, int val) {
 		new->val=val;
 	}
 }
-
 
 void dump(node *head) {
 	while(head!=NULL) {
