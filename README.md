@@ -1,6 +1,12 @@
 # vm
 A Virtual Machine with a custom instruction set.
 
+## Syntax highlighing
+- **VIM**
+    * files in syntax/
+    * instructions, number, and comments work fine.
+    * registers stay white, I don't know how to fix that.
+
 ## Instruction table
 | NAME | OPCODE | USAGE | DESCRIPTION |
 | :---: | :---: | :---: | :---: |
