@@ -43,9 +43,9 @@ const int table[20][8]= {
 
 int parse(const char *infile, const char *outfile) {
     int state=0, tmp, ret_val=0, isWaiting=0;
-    
     int whatArg=1;
     struct operation op;
+
     FILE *out=fopen(outfile, "w");
     if(!out) {
         perror("parse(): fopen(outfile, w)");
@@ -123,7 +123,13 @@ int parse(const char *infile, const char *outfile) {
 
     } while(1);
     if(state==-1) {
-        fprintf(stderr, "ERROR: syntax error in line %d!\n", c->infileLine);
+        // if there was a new line and the state doesn't match with what it shoud be,
+        // the current line will be one too much, so if the scanner encountered a newline
+        // it will set c.wasNewLine to 1.
+        // it will be reset to 0 in the 2nd cal to the scanner (nextToken()) after being set to 1.
+        // so if the state doesn't match and there was a newline (c.wasNewLine != 0), the line is c.infileLine - 1.
+        // else it's simply c.infileLine
+        fprintf(stderr, "ERROR: syntax error in line %d!\n", (c->wasNewLine!=0 ? c->infileLine-1 : c->infileLine));
         remove(outfile);
         ret_val=1;
     } else if(isWaiting!=0) {

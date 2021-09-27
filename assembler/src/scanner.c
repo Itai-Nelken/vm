@@ -12,6 +12,7 @@ SCANNERcontext *scannerInit() {
     strzero(context->buffer);
     context->buffer_size=100*sizeof(char);
     context->infileLine=0;
+    context->wasNewLine=0;
     return context;
 }
 
@@ -49,9 +50,11 @@ int nextToken(SCANNERcontext *context, struct token *t) {
         p=strtok(context->buffer, separator);
         firstRun=0;
     } else {
+        if(context->wasNewLine!=0) context->wasNewLine=0; // reset wasNewLine to 0 if it isn't
         p=strtok(NULL, separator);
     }
     if(p==NULL) {
+        context->wasNewLine=1;
         firstRun=1;
         return 3;
     }
