@@ -115,17 +115,17 @@ int main(void) {
 ```asm
 push 5
 push 2
-add
-pset Ra
+add ; add pops 2 values off the stack, adds them, and pushes the reuslt
+pset Ra ; pset pops 1 value of the stack and stores it in the specified register
 
 push 2
 push 5
 add
 ; The result is already on the stack, so no need to save it.
 
-get Ra
+get Ra ; get pushes the vallue in the specified register and pushes it to the stack
 mul
 
-peek
+peek ; peek simply prints the stack head
 pop ; pop isn't necessary here as its the end of the program
 ```
