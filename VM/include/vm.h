@@ -1,12 +1,13 @@
 #ifndef VM_H
 #define VM_H
 #include "common.h"
-#include "list.h"
+#include "Array.h"
 
 typedef struct vm {
+    int isRunning;
     int stack[STACK_SIZE];
     int registers[REG_COUNT];
-    programNode *progHead;
+    Array *program;
 } VM;
 
 /******
@@ -27,9 +28,16 @@ void vmDestroy(VM *v);
  * Load a binary into a linked list.
  * 
  * @param binaryname The name of the binary to load.
- * @param head Pointer to the head pointer of the list to use.
+ * @param program An initialized Array to hold the program.
  ******/
-int loadBinary(const char *binaryname, programNode **head);
+int loadBinary(const char *binaryname, Array *program);
+
+/******
+ * Execute a loaded binary
+ * 
+ * @param vm A initialized VM context.
+ ******/
+void exec(VM *vm);
 
 /******
  * Push 'data' to v's stack.

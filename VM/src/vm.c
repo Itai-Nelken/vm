@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "common.h"
-#include "list.h"
+#include "Array.h"
 #include "vm.h"
 
 VM *vmInit() {
@@ -19,16 +19,17 @@ VM *vmInit() {
         new->stack[i]=0;
     }
 
-    new->progHead=NULL;
+    new->isRunning=1;
+    new->program=initArray(16, 8);
     return new;
 }
 
 void vmDestroy(VM *v) {
-    listDestroy(v->progHead);
+    destroyArray(v->program);
     free(v);
 }
 
-int loadBinary(const char *binaryname, programNode **head) {
+int loadBinary(const char *binaryname, Array *program) {
     struct operation op;
     FILE *f=fopen(binaryname, "rb");
     if(!f) {
@@ -50,19 +51,102 @@ int loadBinary(const char *binaryname, programNode **head) {
     rewind(f);
     fread(&op, sizeof(struct operation), 1, f); // advance the file stream to the first instruction (after S_START).
     
-    // load the binary into a linked list of the opcodes+operands
+    // load the binary into a dynamic array of the opcodes+operands
     for(;;) {
         fread(&op, sizeof(struct operation), 1, f);
         if(op.instruction==S_END) {
             break;
         }
-        listInsert(head, &op);
+        arrayPush(program, &op);
     }
     fclose(f);
     return 0;
 }
 
 
+void eval(VM *vm, struct operation *op) {
+    switch(op->instruction) {
+        case PUSH:
+            stackPush(vm, op->arg1);
+            break;
+        case POP:
+            stackPop(vm);
+            break;
+        case PEEK:
+            printf("%d\n", stackPeek(vm));
+            break;
+        case ADD:
+            stackPush(vm, stackPop(vm)+stackPop(vm));
+            break;
+        case SUB: {
+            int a=stackPop(vm);
+            stackPush(vm, stackPop(vm)-a);
+            break;
+        }
+        case MUL:
+            stackPush(vm, stackPop(vm)*stackPop(vm));
+            break;
+        case DIV: {
+            int a=stackPop(vm);
+            stackPush(vm, stackPop(vm)/a);
+            break;
+        }
+        case SET:
+            vm->registers[op->arg1]=op->arg2;
+            break;
+        case PSET:
+            vm->registers[op->arg1]=stackPop(vm);
+            break;
+        case GET:
+            stackPush(vm, vm->registers[op->arg1]);
+            break;
+        case MOV:
+            vm->registers[op->arg1]=vm->registers[op->arg2];
+            break;
+        case JMP:
+            vm->registers[PC]=op->arg1-1; // -1 because main loop increments it
+            break;
+        case JEQ:
+            if(stackPop(vm) == stackPop(vm)) {
+                vm->registers[PC]=op->arg1;
+            }
+            break;
+        case JNE:
+            if(stackPop(vm) != stackPop(vm)) {
+                vm->registers[PC]=op->arg1;
+            }
+            break;
+        case JLT: {
+            int a=stackPop(vm);
+            if(stackPop(vm) < a) {
+                vm->registers[PC]=op->arg1;
+            }
+            break;
+        }
+        case JGT: {
+            int a=stackPop(vm);
+            if(stackPop(vm) > a) {
+                vm->registers[PC]=op->arg1;
+            }
+            break;
+        }
+        case NOP:
+            break;
+        case HLT:
+            printf("Program halted\n");
+            vm->isRunning=0;
+            break;
+        default:
+            break;
+    }
+}
+
+void exec(VM *vm) {
+    int *pc=&(vm->registers[PC]);
+    for(; *pc < vm->program->current && vm->isRunning != 0; (*pc)++) {
+        eval(vm, &(vm->program->data[*pc]));
+    }
+}
 
 // 0: full, 1: not full
 static int stackFull(VM *v) {
