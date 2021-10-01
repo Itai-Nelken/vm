@@ -147,6 +147,7 @@ int main(void) {
 ```
 
 ## Examples
+**For other examples, see the `examples/` folder.**
 ### (5 + 2) * (2 + 5)
 ```asm
 push 5
