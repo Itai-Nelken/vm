@@ -1,5 +1,15 @@
 # vm
-A Virtual Machine with a custom instruction set.
+A Virtual Machine and assembler for my first custom instruction set.
+This is my first attempt at designing an instruction set, so a lot of instructions could do the same thing.
+for example `GET <reg>` could be replaced with `PUSH <reg>`.
+
+## Challenge
+I challenge anyone who wants to create the most complicated program possible.
+if you think you have a program that is more complicated than the current one, open a issue with it and I'll add it.
+### LeaderBoard
+|   USERNAME   |               PROGRAM               |          DESCRIPTION            |
+|   :------:   |               :-----:               |          :---------:            |
+| @Itai-Nelken | `examples/multiplication_table.vas` | prints the multiplication table |
 
 ## Building
 ### Assembler
