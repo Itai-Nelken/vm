@@ -108,25 +108,25 @@ void eval(VM *vm, struct operation *op) {
             break;
         case JEQ:
             if(stackPop(vm) == stackPop(vm)) {
-                vm->registers[PC]=op->arg1;
+                vm->registers[PC]=op->arg1-1;
             }
             break;
         case JNE:
             if(stackPop(vm) != stackPop(vm)) {
-                vm->registers[PC]=op->arg1;
+                vm->registers[PC]=op->arg1-1;
             }
             break;
         case JLT: {
             int a=stackPop(vm);
             if(stackPop(vm) < a) {
-                vm->registers[PC]=op->arg1;
+                vm->registers[PC]=op->arg1-1;
             }
             break;
         }
         case JGT: {
             int a=stackPop(vm);
             if(stackPop(vm) > a) {
-                vm->registers[PC]=op->arg1;
+                vm->registers[PC]=op->arg1-1;
             }
             break;
         }
