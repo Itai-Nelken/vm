@@ -2,8 +2,8 @@
 A Virtual Machine with a custom instruction set.
 
 ## TODO
-- [ ] Write the actual VM
-   * [ ] Use a dynamic array for storing the program (instead of the currently used linked list) that way we can use the `pc` register to actually point to the index of an instruction in the program.
+- [x] Write the actual VM
+   * [x] Use a dynamic array for storing the program (instead of the currently used linked list) that way we can use the `pc` register to actually point to the index of an instruction in the program.
 - [ ] Create syntax highlighting for:
    * [x] VIM
    * [ ] VSCode
