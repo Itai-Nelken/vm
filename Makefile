@@ -22,6 +22,6 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 release: vm vas
-	tar -cvf VM_$(shell date +"%d-%m-%Y")_$(OS)-$(ARCH).tar.xz build/ README.md CHANGELOG.md
+	tar -cvf VM_$(shell date +"%d-%m-%Y")_$(OS)-$(ARCH).tar.xz build/ examples/ README.md CHANGELOG.md
 
 .PHONY: all clean release
