@@ -1,6 +1,21 @@
 # vm
 A Virtual Machine with a custom instruction set.
 
+## Building
+### Assembler
+```shell
+cd assembler
+make
+```
+executable is called `vas`.
+
+### VM
+```shell
+cd VM
+make
+```
+executable is called `vm`.
+
 ## TODO
 - [x] Write the actual VM
    * [x] Use a dynamic array for storing the program (instead of the currently used linked list) that way we can use the `pc` register to actually point to the index of an instruction in the program.
