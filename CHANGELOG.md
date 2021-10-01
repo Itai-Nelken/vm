@@ -33,5 +33,6 @@
 
 ### 01/10/2021
 - Finished the VM!
+- Cleanup a bit
 
 <hr>
