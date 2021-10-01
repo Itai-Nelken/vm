@@ -22,7 +22,6 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 release: vm vas
-	@echo -e "\e[1mcompressing build folder...\e[0m"
-	tar -cvf VM_$(shell date +"%d-%m-%Y")_$(OS)-$(ARCH).tar.xz build/
+	tar -cvf VM_$(shell date +"%d-%m-%Y")_$(OS)-$(ARCH).tar.xz build/ README.md CHANGELOG.md
 
-.PHONY: all clean
+.PHONY: all clean release
