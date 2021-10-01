@@ -43,7 +43,7 @@ int loadBinary(const char *binaryname, Array *program) {
     }
     while(op.instruction!=S_END) {
         if(feof(f)) {
-            fprintf(stderr, "ERROR: reached end of file bur no end symbol found!\n");
+            fprintf(stderr, "ERROR: reached end of file but no end symbol found!\n");
             return 1;
         }
         fread(&op, sizeof(struct operation), 1, f);
