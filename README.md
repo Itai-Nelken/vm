@@ -18,12 +18,12 @@ In the root of the repo run:
 ```shell
 make
 ```
-The executables will be in `build/`.
+The executables will be in `build/`.<br>
 You can compress build to a `.tar.xz` archive with `make release`.
 you can override the following variables:
 - `CC` - The C compiler to use, default is `gcc`.
-- `OS` - The OS name to use when compressing the build folder.
-- `ARCH` - The acrhitecture to use when compressing the build folder. 
+- `OS` - The OS name to use when compressing the build folder, default is the output of `uname -s`.
+- `ARCH` - The acrhitecture to use when compressing the build folder, default is the output of `uname -m`.
 
 ## TODO
 - [x] Write the actual VM
