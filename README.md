@@ -146,8 +146,8 @@ int main(void) {
 }
 ```
 
-### Example: (5 + 2) * (2 + 5)
-**Expected result: 49**<br>
+## Examples
+### (5 + 2) * (2 + 5)
 ```asm
 push 5
 push 2
@@ -164,4 +164,21 @@ mul
 
 peek ; peek simply prints the stack head
 pop ; pop isn't necessary here as its the end of the program
+```
+### count to 10
+```asm
+set Ra 0 ; set Ra to 0, this isn't neccesary as all registers are zeroed at VM start 
+
+; increment Ra
+get Ra
+push 1
+add
+peek ; print the incremented value
+pset Ra
+
+; jump back to the 'increment Ra' part if the value in Ra doesn't equal 10
+get Ra
+push 5
+jne 1
+hlt ; isn't neccesary, prints 'program halted'
 ```
