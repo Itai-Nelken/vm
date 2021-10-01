@@ -1,6 +1,6 @@
 # VM
 A Virtual Machine and assembler for my first custom instruction set. and I know, it has the most original name ever 🙃.<br>
-This is my first attempt at designing an instruction set, so a lot of instructions could do the same thing.<br>
+This is my first attempt at designing an instruction set, so a lot of instructions could be removed and others do their job.<br>
 for example `GET <reg>` could be replaced with `PUSH <reg>`.
 
 ## Challenge
