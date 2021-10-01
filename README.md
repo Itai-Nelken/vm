@@ -1,15 +1,17 @@
-# vm
-A Virtual Machine and assembler for my first custom instruction set.
-This is my first attempt at designing an instruction set, so a lot of instructions could do the same thing.
+# VM
+A Virtual Machine and assembler for my first custom instruction set. and I know, it has the most original name ever 🙃.
+This is my first attempt at designing an instruction set, so a lot of instructions could do the same thing.<br>
 for example `GET <reg>` could be replaced with `PUSH <reg>`.
 
 ## Challenge
-I challenge anyone who wants to create the most complicated program possible.
-if you think you have a program that is more complicated than the current one, open a issue with it and I'll add it.
+I challenge anyone who wants to create the most complicated program possible.<br>
+You can submit your program(s) [here](https://github.com/Itai-Nelken/vm/issues/new).
 ### Leaderboard
-|                    USERNAME                    |               PROGRAM               |          DESCRIPTION            |
-|                    :------:                    |               :-----:               |          :---------:            |
-| [@Itai-Nelken](https://github.com/Itai-Nelken) | `examples/multiplication_table.vas` | prints the multiplication table |
+|        |                    USERNAME                    |               PROGRAM               |          DESCRIPTION            |
+| :----: |                    :------:                    |               :-----:               |          :---------:            |
+| 1st 🥇 | [@Itai-Nelken](https://github.com/Itai-Nelken) | `examples/multiplication_table.vas` | prints the multiplication table |
+| 2nd 🥈 |                                                |                                     |                                 |
+| 3rd 🥉 |                                                |                                     |                                 |
 
 ## Building
 ### Assembler
@@ -91,7 +93,7 @@ binary format
 | :---------: | :-------: | :-------: |
 |   2 bytes   |  4 bytes  |  4 bytes  |
 
-Internally the opcode + operands is a `struct`:
+Internally the opcode + operands are a `struct`:
 ```c
 struct operation {
     short instruction;
@@ -99,7 +101,7 @@ struct operation {
 };
 ```
 
-C program to write the following program:
+C program to write the following VM program:
 ```asm
 push 5
 push 6
