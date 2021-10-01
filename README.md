@@ -14,19 +14,16 @@ You can submit your program(s) [here](https://github.com/Itai-Nelken/vm/issues/n
 | 3rd 🥉 |                                                |                                     |                                 |
 
 ## Building
-### Assembler
+In the root of the repo run:
 ```shell
-cd assembler
 make
 ```
-executable is called `vas`.
-
-### VM
-```shell
-cd VM
-make
-```
-executable is called `vm`.
+The executables will be in `build/`.
+You can compress build to a `.tar.xz` archive with `make release`.
+you can override the following variables:
+- `CC` - The C compiler to use, default is `gcc`.
+- `OS` - The OS name to use when compressing the build folder.
+- `ARCH` - The acrhitecture to use when compressing the build folder. 
 
 ## TODO
 - [x] Write the actual VM
