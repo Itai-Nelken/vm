@@ -12,9 +12,14 @@ A Virtual Machine with a custom instruction set.
 
 ## Syntax highlighing
 - **VIM**
-    * files in syntax/
+    * files in syntax/VIM
     * instructions, number, and comments work fine.
     * registers stay white, I don't know how to fix that.
+- **VSCode**
+    * No official extension yet.
+    * [This](https://marketplace.visualstudio.com/items?itemName=dan-c-underwood.arm) one for ARM assembly works fine for now.
+- **Sublime Text**
+    * No official extension yet.
 
 ## Instruction table
 | NAME | OPCODE | USAGE | DESCRIPTION |
@@ -127,6 +132,7 @@ int main(void) {
 ```
 
 ### Example: (5 + 2) * (2 + 5)
+**Expected result: 49**<br>
 ```asm
 push 5
 push 2

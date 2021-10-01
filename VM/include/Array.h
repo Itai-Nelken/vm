@@ -29,7 +29,7 @@ void destroyArray(Array *a);
  * Add a value to the top of the array.
  * 
  * @param a An initialized Array context.
- * @param value The value to push
+ * @param op A pointer to a struct operation to push.
  *****/
 void arrayPush(Array *a, struct operation *op);
 
