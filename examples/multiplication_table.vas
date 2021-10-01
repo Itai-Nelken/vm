@@ -1,0 +1,30 @@
+set Ra 1 ; 0
+set Rb 1 ; 1
+
+; loop start
+get Ra  ; 2
+get Rb  ; 3
+mul     ; 4
+peek    ; 5
+pop     ; 6
+
+get Ra  ; 7
+push 1  ; 8
+add     ; 9
+pset Ra ; 10
+get Ra  ; 11
+push 11 ; 12
+jne 2   ; 13
+
+; increment Rb
+get Rb  ; 14
+push 1  ; 15
+add     ; 16
+pset Rb ; 17
+
+; reset Ra
+set Ra 1
+
+get Rb  ; 18
+push 11 ; 19
+jne 2   ; 20
