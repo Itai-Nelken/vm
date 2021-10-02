@@ -1,4 +1,4 @@
 .vscode
-src/*.o
-vm
-vas
+assembler/src/*.o
+VM/src/*.o
+build
