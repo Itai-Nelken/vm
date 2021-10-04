@@ -167,7 +167,7 @@ push 5
 add
 ; The result is already on the stack, so no need to save it.
 
-get Ra ; get pushes the vallue in the specified register and pushes it to the stack
+get Ra ; get pushes the value in the specified register and pushes it to the stack
 mul
 
 peek ; peek simply prints the stack head
