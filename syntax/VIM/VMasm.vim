@@ -1,7 +1,7 @@
 " Vim syntax file
 " Language: VM assembly
 " Maintainer: Itai Nelken
-" Latest Revision: 26 September 2021
+" Latest Revision: 4 October 2021
 
 if exists("b:current_syntax")
 	finish
