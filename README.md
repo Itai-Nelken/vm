@@ -19,7 +19,7 @@ In the root of the repo run:
 make
 ```
 The executables will be in `build/`.<br>
-You can compress the build, examples and syntax foldesr along with the README.md and CHANGELOG.md files into a `.tar.xz` archive with `make release`.<br>
+You can compress the build, examples and syntax folders along with the README.md and CHANGELOG.md files into a `.tar.xz` archive with `make release`.<br>
 you can override the following variables when running `make`:
 - `CC` - The C compiler to use, default is `gcc`.
 - `OS` - The OS name to use when compressing the build folder, default is the output of `uname -s`.
