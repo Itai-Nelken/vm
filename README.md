@@ -32,13 +32,11 @@ you can override the following variables when running `make`:
    * [x] VIM
    * [ ] VSCode
    * [ ] Sublime Text
-- [ ] Fix register highlighting for vim syntax highlighting.
+- [x] Fix register highlighting for vim syntax highlighting.
 
 ## Syntax highlighing
-- **VIM**
-    * files in syntax/VIM
-    * instructions, number, and comments work fine.
-    * registers stay white, I don't know how to fix that.
+- **VIM**<br>
+    Copy the files in `syntax/VIM` to `~/.vim`.
 - **VSCode**
     * No official extension yet.
     * [This](https://marketplace.visualstudio.com/items?itemName=dan-c-underwood.arm) one for ARM assembly works fine for now.
