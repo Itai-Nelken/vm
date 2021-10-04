@@ -129,24 +129,24 @@ int main(void) {
     op.instruction=S_START;
     op.arg1=0;
     op.arg2=0;
-    fwrite(&op, sizeof(op), 1, out);
+    fwrite(&op, sizeof(*op), 1, out);
 
     op.instruction=PUSH;
     op.arg1=5;
-    fwrite(&op, sizeof(op), 1, out);
+    fwrite(&op, sizeof(*op), 1, out);
 
     op.arg1=6;
-    fwrite(&op, sizeof(op), 1, out);
+    fwrite(&op, sizeof(*op), 1, out);
     op.arg1=0;
 
     op.instruction=ADD;
-    fwrite(&op, sizeof(op), 1, out);
+    fwrite(&op, sizeof(*op), 1, out);
 
     op.instruction=PEEK;
-    fwrite(&op, sizeof(op), 1, out);
+    fwrite(&op, sizeof(*op), 1, out);
 
     op.instruction=S_END;
-    fwrite(&op, sizeof(op), 1, out);
+    fwrite(&op, sizeof(*op), 1, out);
 
     fclose(out);
     return 0;
