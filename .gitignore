@@ -2,3 +2,4 @@
 assembler/src/*.o
 VM/src/*.o
 build
+*.tar.xz
