@@ -7,7 +7,7 @@ OBJ = $(SRC:.c=.o)
 BIN := vas
 DEBUG ?= 0
 VERBOSE ?= 0
-ifneq (DEBUG, 0)
+ifeq (DEBUG, 1)
 	CFLAGS += -g
 endif
 
