@@ -44,5 +44,6 @@
 ### 03/10/2021
 - fix VIM syntax highlighting
 - Clean up syntax/ folder
+- Make the disassembler (`vas -d <vm binary>`) print the instruction number in the program before each instruction.
 
 <hr>
