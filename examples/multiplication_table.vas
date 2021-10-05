@@ -1,3 +1,5 @@
+; print the multiplication table
+
 set Ra 1 ; 0
 set Rb 1 ; 1
 
@@ -28,3 +30,4 @@ set Ra 1
 get Rb  ; 18
 push 11 ; 19
 jne 2   ; 20
+

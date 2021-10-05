@@ -8,14 +8,14 @@ if exists("b:current_syntax")
 endif
 
 " Keywords
-syn keyword VMKeyword push pop peek add sub mul div set pset get jmp jeq jlt jgt mov nop hlt
-syn keyword VMKeyword PUSH POP PEEK ADD SUB MUL DIV SET PSET GET JMP JEQ JLT JGT MOV NOP HLT
+syn keyword VMKeyword push pop peek add sub mul div set pset get jmp jeq jne jlt jgt mov nop hlt
+syn keyword VMKeyword PUSH POP PEEK ADD SUB MUL DIV SET PSET GET JMP JEQ JNE JLT JGT MOV NOP HLT
 
 " Registers
 syn keyword Reg a b c d e f sp pc
 syn keyword Reg A B C D E F SP PC
-syn match VMRegister "\vR.*"
-syntax match VMRegister "\vr.*"
+syn match VMRegister "R\w"
+syntax match VMRegister "r\w"
 
 " Numbers
 syntax match VMNumber "\v<\d+>" " any integer number
