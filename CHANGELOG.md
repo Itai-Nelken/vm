@@ -35,5 +35,14 @@
 - Finished the VM!
 - Cleanup a bit
 - Fix JMP commands.
+- Add example program that prints the multiplication table
+- Added base Makefile
+
+### 02/10/2021
+- Fix typo in VM/src/vm.c
+
+### 03/10/2021
+- fix VIM syntax highlighting
+- Clean up syntax/ folder
 
 <hr>
