@@ -77,8 +77,17 @@ you can override the following variables when running `make`:
 | `SP` | 6 | Stack Pointer (points to the stack head). |
 | `PC` | 7 | Program Counter/Instruction Pointer (Points to the instruction to execute in the program). |
 
-binary format
--------------
+### How to read disassembler output (`vas -d <vm binary>`)
+The output of the disassembler contains 3 rows:
+1) The instruction number in the program.
+2) The opcode number.
+3) The opcode + operands.
+For example the following line means that instruction `0` in the program is `0x0`, `PUSH` with the operand `10`:
+```
+    0 0x0 PUSH 10
+```
+
+## binary format
 **SYMOBLS:**<br>
 `START`: 0xFFFF (-1)<br>
 `END`: 0xFEFF (-2)

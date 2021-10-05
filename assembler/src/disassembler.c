@@ -145,7 +145,7 @@ int str2reg(const char *reg) {
 
 void disassemble(FILE *in) {
     struct operation op;
-    int exit=0;
+    int exit=0, pc=0;
 
     fread(&op, sizeof(struct operation), 1, in);
     if(op.instruction != -1) {
@@ -156,69 +156,71 @@ void disassemble(FILE *in) {
         switch(op.instruction) {
             case S_START:
                 printf("START:\n");
+                pc--;
                 break;
             case S_END:
-                puts("END");
+                printf("END\n");
                 exit=1;
                 continue;
             case PUSH:
-                printf("\t0x%X PUSH %d\n", PUSH, op.arg1);
+                printf("\t%d 0x%X PUSH %d\n", pc, PUSH, op.arg1);
                 break;
             case POP:
-                printf("\t0x%X POP\n", POP);
+                printf("\t%d 0x%X POP\n", pc, POP);
                 break;
             case PEEK:
-                printf("\t0x%X PEEK\n", PEEK);
+                printf("\t%d 0x%X PEEK\n", pc, PEEK);
                 break;
             case ADD:
-                printf("\t0x%X ADD\n", ADD);
+                printf("\t%d 0x%X ADD\n", pc, ADD);
                 break;
             case SUB:
-                printf("\t0x%X SUB\n", SUB);
+                printf("\t%d 0x%X SUB\n", pc, SUB);
                 break;
             case MUL:
-                printf("\t0x%X MUL\n", MUL);
+                printf("\t%d 0x%X MUL\n", pc, MUL);
                 break;
             case DIV:
-                printf("\t0x%X DIV\n", DIV);
+                printf("\t%d 0x%X DIV\n", pc, DIV);
                 break;
             case SET:
-                printf("\t0x%X SET R%s %d\n", SET, reg2str(op.arg1), op.arg2);
+                printf("\t%d 0x%X SET R%s %d\n", pc, SET, reg2str(op.arg1), op.arg2);
                 break;
             case PSET:
-                printf("\t0x%X PSET R%s\n", PSET, reg2str(op.arg1));
+                printf("\t%d 0x%X PSET R%s\n", pc, PSET, reg2str(op.arg1));
                 break;
             case GET:
-                printf("\t0x%X GET R%s\n", GET, reg2str(op.arg1));
+                printf("\t%d 0x%X GET R%s\n", pc, GET, reg2str(op.arg1));
                 break;
             case MOV:
-                printf("\t0x%X MOV R%s R%s\n", MOV, reg2str(op.arg1), reg2str(op.arg2));
+                printf("\t%d 0x%X MOV R%s R%s\n", pc, MOV, reg2str(op.arg1), reg2str(op.arg2));
                 break;
             case JMP:
-                printf("\t0x%X JMP %d\n", JMP, op.arg1);
+                printf("\t%d 0x%X JMP %d\n", pc, JMP, op.arg1);
                 break;
             case JEQ:
-                printf("\t0x%X JEQ %d\n", JEQ, op.arg1);
+                printf("\t%d 0x%X JEQ %d\n", pc, JEQ, op.arg1);
                 break;
             case JNE:
-                printf("\t0x%X JNE %d\n", JNE, op.arg1);
+                printf("\t%d 0x%X JNE %d\n", pc, JNE, op.arg1);
                 break;
             case JLT:
-                printf("\t0x%X JLT %d\n", JLT, op.arg1);
+                printf("\t%d 0x%X JLT %d\n", pc, JLT, op.arg1);
                 break;
             case JGT:
-                printf("\t0x%X JGT %d\n", JGT, op.arg1);
+                printf("\t%d 0x%X JGT %d\n", pc, JGT, op.arg1);
                 break;
             case NOP:
-                printf("\t0x%X NOP\n", NOP);
+                printf("\t%d 0x%X NOP\n", pc, NOP);
                 break;
             case HLT:
-                printf("\t0x%X HLT\n", HLT);
+                printf("\t%d 0x%X HLT\n", pc, HLT);
                 break;
             default:
-                printf("\tUNKOWN\n");
+                printf("\t%d UNKOWN\n", pc);
                 break;
         }
         fread(&op, sizeof(struct operation), 1, in);
+        pc++;
     }
 }
