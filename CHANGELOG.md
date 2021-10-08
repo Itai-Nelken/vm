@@ -21,29 +21,32 @@
 - Start work on the actual VM.
 
 ### 23/09/2021
-- Improve disassembler: handle failed to open file error and print 'R<reg>' instead of '<reg>'.
+- Improve disassembler: handle failed to open file error and print `R<reg>` instead of `<reg>`.
 
 ### 24/09/2021
 - VM: implement loading the binary into a linked list (bad idea as I can't iterate over it with the program counter easily).
 - Update documentation.
 
 ### 27/09/2021
-- Assembler: fix incorrect line being printed in syntac error in some cases.
+- Assembler: fix incorrect line being printed in syntax error in some cases.
 - Update documentation.
 
 ### 01/10/2021
 - Finished the VM!
 - Cleanup a bit
 - Fix JMP commands.
-- Add example program that prints the multiplication table
-- Added base Makefile
+- Add example program that prints the multiplication table.
+- Added base Makefile.
 
 ### 02/10/2021
 - Fix typo in VM/src/vm.c
 
 ### 03/10/2021
-- fix VIM syntax highlighting
+- Fix VIM syntax highlighting
 - Clean up syntax/ folder
 - Make the disassembler (`vas -d <vm binary>`) print the instruction number in the program before each instruction.
+
+### 08/10/2021
+- Add example that prints the first 21 numbers in the fibonacci sequence.
 
 <hr>

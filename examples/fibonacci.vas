@@ -1,0 +1,34 @@
+; print the first 21 numbers in the fibonacci sequence
+
+; it isn't neccesary to set registers to 0
+; but I like to do that as a way to declare what I'm using them for
+set Ra 0 ; 0 ; num 1
+set Rb 1 ; 1 ; num 2
+set Rc 0 ; 2 ; result
+set Rd 0 ; 3 ; loop counter
+
+; print 0
+get Ra
+peek
+pop
+
+get Ra ; 7
+get Rb ; get Ra and Rb
+add ; add them
+peek ; print the result
+pset Rc ; put the result in Rc
+mov Ra Rb ; mov the value in Rb to Ra
+mov Rb Rc ; and the value in Rc to Rb
+; 'MOV' actually only copies the value, it still stays in the source register
+
+; increment the loop counter register
+get Rd
+push 1
+add
+pset Rd
+
+; check the condition of the loop (loop counter != 20) (the 1st number printed is 0 at the top)
+get Rd
+push 20
+jne 7
+
