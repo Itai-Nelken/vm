@@ -10,7 +10,7 @@
 SCANNERcontext *scannerInit() {
     SCANNERcontext *context=malloc(sizeof(SCANNERcontext));
     strzero(context->buffer);
-    context->buffer_size=100*sizeof(char);
+    context->buffer_size=200*sizeof(char);
     context->infileLine=0;
     context->wasNewLine=0;
     return context;

@@ -1,34 +1,24 @@
-; print the first 21 numbers in the fibonacci sequence
+; print the first 40 numbers in the fibonacci sequence
 
-; it isn't neccesary to set registers to 0
-; but I like to do that as a way to declare what I'm using them for
-set Ra 0 ; 0 ; num 1
-set Rb 1 ; 1 ; num 2
-set Rc 0 ; 2 ; result
-set Rd 0 ; 3 ; loop counter
+; seting registers to 0 is unnecesary, but I like to do it as a declaration of "I'm going to use this register"
+set Ra 0 ; 0
+set Rb 1 ; 1
+set Rc 0 ; 2
+set Rd 0 ; 3
 
-; print 0
-get Ra
+get Ra ; 4
 peek
-pop
+get Rb
+add
+pset Rc
+mov Ra Rb
+mov Rb Rc
 
-get Ra ; 7
-get Rb ; get Ra and Rb
-add ; add them
-peek ; print the result
-pset Rc ; put the result in Rc
-mov Ra Rb ; mov the value in Rb to Ra
-mov Rb Rc ; and the value in Rc to Rb
-; 'MOV' actually only copies the value, it still stays in the source register
-
-; increment the loop counter register
 get Rd
 push 1
 add
 pset Rd
-
-; check the condition of the loop (loop counter != 20) (the 1st number printed is 0 at the top)
 get Rd
-push 20
-jne 7
+push 40
+jne 4
 

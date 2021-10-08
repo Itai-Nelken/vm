@@ -15,7 +15,7 @@ typedef struct scan_context {
     FILE *infile;
     int wasNewLine; // will be 1 if the scanner encountered a newline and will be set to zero the 2nd time the scanner is called after being set to 1
     unsigned int infileLine;
-    char buffer[100];
+    char buffer[200];
     size_t buffer_size;
 } SCANNERcontext;
 
