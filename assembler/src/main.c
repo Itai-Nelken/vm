@@ -3,7 +3,7 @@
 #include <string.h>
 #include <getopt.h>
 #include "disassembler.h"
-#include "parser.h"
+#include "assembler.h"
 
 static int disassembler(const char *binaryname) {
     FILE *in=fopen(binaryname, "rb");
@@ -63,8 +63,7 @@ int main(int argc, char **argv) {
         }
     }
     if(exit!=1)
-        ret_val=parse(infile, outfile!=NULL ? outfile : "as.out.vm");
+        ret_val=assembleFile(infile, outfile!=NULL ? outfile : "as.out.vm");
     free(infile);
     return ret_val;
 }
-

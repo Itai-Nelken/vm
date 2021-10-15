@@ -47,6 +47,9 @@
 - Make the disassembler (`vas -d <vm binary>`) print the instruction number in the program before each instruction.
 
 ### 08/10/2021
-- Add example that prints the first 21 numbers in the fibonacci sequence.
+- Add example that prints the first 40 numbers in the fibonacci sequence.
+
+### 15-16/10/2021
+- Rewrite the assembler, nothing substantial. just making the code more readable and loading the program into a dynamic array before writing it.
 
 <hr>

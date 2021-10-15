@@ -1,52 +1,54 @@
 #ifndef SCANNER_H
 #define SCANNER_H
 #include <stdio.h>
+#include <stdbool.h>
 
-enum tokens {
-    T_INSTR, T_REG, T_INT
-};
+#ifndef SCANNER_BUFFER_SIZE
+#define SCANNER_BUFFER_SIZE 200
+#endif
+
+
+typedef struct scanner {
+    FILE *infile;
+    bool _wasNewLine, _firstRun;
+    unsigned int infileLine;
+    char buffer[SCANNER_BUFFER_SIZE];
+    Status status;
+} Scanner;
+
+// 18 and 19 because of parser state table
+typedef enum Token {
+    T_INSTR, T_REG=18, T_INT=19
+} Token;
 
 struct token {
-    int token;
+    Token token;
     int value;
+    unsigned int line;
 };
-
-typedef struct scan_context {
-    FILE *infile;
-    int wasNewLine; // will be 1 if the scanner encountered a newline and will be set to zero the 2nd time the scanner is called after being set to 1
-    unsigned int infileLine;
-    char buffer[200];
-    size_t buffer_size;
-} SCANNERcontext;
 
 /******
  * Initialize a scanner context. you should free the context with scannerDestroy() when done with it.
  * 
- * @return A pointer to a malloc()ed scanner context.
+ * @return A pointer to a malloc()'ed scanner context.
  ******/
-SCANNERcontext *scannerInit();
+Scanner *scannerInit();
 
 /******
- * Destroy a scanner context (free() it)
+ * Destroy a scanner context (free() it).
  * 
- * @param context An initialized scanner context to destroy.
+ * @param s An initialized scanner context to destroy.
  ******/
-void scannerDestroy(SCANNERcontext *context);
-
-// 0: success.
-// 1: end of file.
-// 2: unrecognized token.
-// 3: end of line/newline.
+void scannerDestroy(Scanner *s);
 
 /******
  * Get the next token from the file.
  * 
  * @param context An initialized scanner context.
- * @param t A struct token to populate.
+ * @param token A struct token to populate.
  * 
- * @return 0: success. 1: end of file. 2: unrecognized token. 3: end of line/newline.
- * 2 is the only error.
+ * @return SUCCESS, END_OF_FILE, END_OF_LINE, UNRECOGNIZED_TOKEN from the status enum.
  ******/
-int nextToken(SCANNERcontext *context, struct token *t);
+Status nextToken(Scanner *context, struct token *token);
 
 #endif // SCANNER_H

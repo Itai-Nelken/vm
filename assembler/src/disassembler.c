@@ -148,9 +148,9 @@ void disassemble(FILE *in) {
     int exit=0, pc=0;
 
     fread(&op, sizeof(struct operation), 1, in);
-    if(op.instruction != -1) {
+    if(op.instruction != S_START) {
     	fprintf(stderr, "ERROR: unrecognized binary format!\n");
-	return;
+	    return;
     }
     while(exit==0 && !feof(in)) {
         switch(op.instruction) {

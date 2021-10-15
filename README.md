@@ -10,7 +10,7 @@ You can submit your program(s) [here](https://github.com/Itai-Nelken/vm/issues/n
 |        |                    USERNAME                    |               PROGRAM               |          DESCRIPTION            |
 | :----: |                    :------:                    |               :-----:               |          :---------:            |
 | 1st 🥇 | [@Itai-Nelken](https://github.com/Itai-Nelken) | `examples/multiplication_table.vas` | prints the multiplication table |
-| 2nd 🥈 | [@Itai-Nelken](https://github.com/Itai-Nelken) | `examples/fibonacci.vas`            | prints the first 21 numbers in the fibonacci sequence. |
+| 2nd 🥈 | [@Itai-Nelken](https://github.com/Itai-Nelken) | `examples/fibonacci.vas`            | prints the first 40 numbers in the fibonacci sequence. |
 | 3rd 🥉 |                                                |                                     |                                 |
 
 ## Building

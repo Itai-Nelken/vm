@@ -1,15 +1,15 @@
 #ifndef PARSER_H
 #define PARSER_H
+#include "Array.h"
 
 /******
- * Assemble a binary from a file. calls the scanner, does the parsing, and then writes the binary.
+ * Assembler a program into a dynamic array.
  * 
  * @param infile the name of the file to read.
- * @param outfile the name of the file to write.
+ * @param prog the dynamic array to write the assembled program to.
  * 
- * @return 0: success, 1: failure.
- * failure includes syntax errors.
+ * @return SUCCESS, OPEN_FILE_FAILURE, SYNTAX_ERROR from the status enum.
  ******/
-int parse(const char *infile, const char *outfile);
+Status parseFile(const char *infile, Array *prog);
 
 #endif // PARSER_H
