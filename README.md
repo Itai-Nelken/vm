@@ -22,6 +22,7 @@ The executables will be in `build/`.<br>
 You can compress the build, examples and syntax folders along with the README.md and CHANGELOG.md files into a `.tar.xz` archive with `make release`.<br>
 you can override the following variables when running `make`:
 - `CC` - The C compiler to use, default is `gcc`.
+- `CFLAGS` - Flags for the C compiler. default is `-Wall -Wextra -Wpedantic` and the include path.
 - `OS` - The OS name to use when compressing the build folder, default is the output of `uname -s`.
 - `ARCH` - The acrhitecture to use when compressing the build folder, default is the output of `uname -m`.
 

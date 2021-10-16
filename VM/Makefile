@@ -1,6 +1,6 @@
 CC := gcc
 LD := gcc
-CFLAGS = -Wall -Iinclude
+CFLAGS += -Iinclude
 SRC = $(wildcard src/*.c)
 OBJ = $(SRC:.c=.o)
 BIN := vm

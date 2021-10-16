@@ -143,7 +143,7 @@ void eval(VM *vm, struct operation *op) {
 
 void exec(VM *vm) {
     int *pc=&(vm->registers[PC]);
-    for(; *pc < vm->program->current && vm->isRunning != 0; (*pc)++) {
+    for(; *pc < (int)vm->program->current && vm->isRunning != 0; (*pc)++) {
         eval(vm, &(vm->program->data[*pc]));
     }
 }
