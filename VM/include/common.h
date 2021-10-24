@@ -42,4 +42,7 @@ struct operation {
     int arg1, arg2;
 };
 
+// typedefs
+typedef unsigned int uint;
+
 #endif // COMMON_H
