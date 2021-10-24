@@ -1,5 +1,6 @@
 #ifndef DISASSEMBLER_H
 #define DISASSEMBLER_H
+#include <stdio.h>
 #include "common.h"
 
 /******

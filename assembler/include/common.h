@@ -1,6 +1,8 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#include <stdbool.h>
+
 // symbols
 #define S_START -1
 #define S_END -2
@@ -35,5 +37,15 @@ struct operation {
     short instruction;
     int arg1, arg2;
 };
+
+typedef enum status {
+    SUCCESS,
+    FAILURE,
+    END_OF_FILE,
+    END_OF_LINE,
+    UNRECOGNIZED_TOKEN,
+    OPEN_FILE_FAILURE,
+    SYNTAX_ERROR
+} Status;
 
 #endif // COMMON_H

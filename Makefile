@@ -2,6 +2,7 @@ CC := gcc
 BUILD_DIR := build
 OS := $(shell uname -s)
 ARCH := $(shell uname -m)
+CFLAGS := -Wall -Wextra -Wpedantic
 
 all: vm vas
 
@@ -9,7 +10,7 @@ $(BUILD_DIR):
 	mkdir $(BUILD_DIR)
 
 vm: $(BUILD_DIR)
-	$(MAKE) -C VM
+	$(MAKE) $(CFLAGS) -C VM
 	@cp VM/vm $(BUILD_DIR)/vm
 
 vas: $(BUILD_DIR)

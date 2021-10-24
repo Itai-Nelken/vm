@@ -1,6 +1,19 @@
 #include <string.h>
 #include "utilities.h"
 
+void strzero(char *s) {
+    while(*s++) {
+        *s=0;
+    }
+}
+
+void leftShift(char *s) {
+    for(int i = 1; i < strlen(s); i++) {
+        s[i-1] = s[i];
+    }
+    s[strlen(s)-1]='\0';
+}
+
 int strcontains(char *s, const char *c) {
     int exit=0;
     for(int i=0; i<strlen(s) && exit!=1; ++i) {
@@ -11,18 +24,8 @@ int strcontains(char *s, const char *c) {
             if(exit==1) break;
         }
     }
-    return exit ^ 1; // xor exit with 1 so if exit==1, return 0.
+    return !exit; // if exit==1 (match found), return 0. if no match found (exit==0), return 1.
 }
-
-/***
- * XOR
- * ===
- * |in |in |out|
- * | 0 | 0 | 0 |
- * | 1 | 0 | 1 |
- * | 0 | 1 | 1 |
- * | 1 | 1 | 0 | // what strcontains() uses XOR for.
- ***/
 
 int str2int(char *s) {
     int value=0;
@@ -31,17 +34,3 @@ int str2int(char *s) {
     }
     return value;
 }
-
-void strzero(char *s) {
-    while(*s++) {
-        *s=0;
-    }
-}
-
-void leftShift(char *s) {
-    for(int i = 1; i < strlen(s); i++) {
-        s[i - 1] = s[i];
-    }
-    s[strlen(s)-1]='\0';
-}
-

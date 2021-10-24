@@ -29,6 +29,8 @@ void vmDestroy(VM *v);
  * 
  * @param binaryname The name of the binary to load.
  * @param program An initialized Array to hold the program.
+ * 
+ * @return 0: success 1: error
  ******/
 int loadBinary(const char *binaryname, Array *program);
 

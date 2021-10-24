@@ -4,20 +4,21 @@
 #include <ctype.h>
 #include "common.h"
 #include "utilities.h"
-#include "scanner.h"
 #include "disassembler.h"
+#include "scanner.h"
 
-SCANNERcontext *scannerInit() {
-    SCANNERcontext *context=malloc(sizeof(SCANNERcontext));
-    strzero(context->buffer);
-    context->buffer_size=200*sizeof(char);
-    context->infileLine=0;
-    context->wasNewLine=0;
-    return context;
+Scanner *scannerInit() {
+    Scanner *new=malloc(sizeof(*new));
+    strzero(new->buffer);
+    new->infileLine=0;
+    new->_wasNewLine=false;
+    new->_firstRun=true;
+    new->status=SUCCESS;
+    return new;
 }
 
-void scannerDestroy(SCANNERcontext *context) {
-    free(context);
+void scannerDestroy(Scanner *s) {
+    free(s);
 }
 
 void trim(char *s) {
@@ -30,111 +31,112 @@ void trim(char *s) {
     }
 }
 
-// 0: success.
-// 1: end of file.
-// 2: unrecognized token.
-// 3: end of line/newline/comment.
-int nextToken(SCANNERcontext *context, struct token *t) {
-    static int firstRun=1;
+Status nextToken(Scanner *context, struct token *token) {
     char *p, *separator=" ";
-    if(firstRun==1) {
+    if(context->_firstRun) {
         strzero(context->buffer);
-        if(fgets(context->buffer, (context->buffer_size)-1, context->infile)==NULL) {
-            return 1;
+        if(fgets(context->buffer, SCANNER_BUFFER_SIZE-1, context->infile)==NULL) {
+            context->status=END_OF_FILE;
+            return END_OF_FILE;
         }
         (context->infileLine)++;
         trim(context->buffer);
-    }
-
-    if(firstRun==1) {
         p=strtok(context->buffer, separator);
-        firstRun=0;
+        context->_firstRun=false;
     } else {
-        if(context->wasNewLine!=0) context->wasNewLine=0; // reset wasNewLine to 0 if it isn't
+        // reset wasNewLine if it isn't
+        if(!context->_wasNewLine) context->_wasNewLine=false;
         p=strtok(NULL, separator);
     }
     if(p==NULL) {
-        context->wasNewLine=1;
-        firstRun=1;
-        return 3;
+        context->_wasNewLine=true;
+        context->_firstRun=1;
+        context->status=END_OF_LINE;
+        return END_OF_LINE;
     }
+    // trim here because we want to handle strtok() returning NULL first
     trim(p);
+    // handle newlines and comments
     if(*p=='\n' || *p==';') {
-        firstRun=1;
-        return  3;
+        context->_firstRun=true;
+        context->status=END_OF_LINE;
+        return END_OF_LINE;
     } else if(!strcasecmp(p, "PUSH")) { // instructions
-        t->token=T_INSTR;
-        t->value=PUSH;
+        token->value=PUSH;
+        token->token=T_INSTR;
     } else if(!strcasecmp(p, "POP")) {
-        t->token=T_INSTR;
-        t->value=POP;
+        token->token=T_INSTR;
+        token->value=POP;
     } else if(!strcasecmp(p, "PEEK")) {
-        t->token=T_INSTR;
-        t->value=PEEK;
+        token->token=T_INSTR;
+        token->value=PEEK;
     } else if(!strcasecmp(p, "ADD")) {
-        t->token=T_INSTR;
-        t->value=ADD;
+        token->token=T_INSTR;
+        token->value=ADD;
     } else if(!strcasecmp(p, "ADD")) {
-        t->token=T_INSTR;
-        t->value=ADD;
+        token->token=T_INSTR;
+        token->value=ADD;
     } else if(!strcasecmp(p, "SUB")) {
-        t->token=T_INSTR;
-        t->value=SUB;
+        token->token=T_INSTR;
+        token->value=SUB;
     } else if(!strcasecmp(p, "MUL")) {
-        t->token=T_INSTR;
-        t->value=MUL;
+        token->token=T_INSTR;
+        token->value=MUL;
     } else if(!strcasecmp(p, "DIV")) {
-        t->token=T_INSTR;
-        t->value=DIV;
+        token->token=T_INSTR;
+        token->value=DIV;
     } else if(!strcasecmp(p, "SET")) {
-        t->token=T_INSTR;
-        t->value=SET;
+        token->token=T_INSTR;
+        token->value=SET;
     } else if(!strcasecmp(p, "PSET")) {
-        t->token=T_INSTR;
-        t->value=PSET;
+        token->token=T_INSTR;
+        token->value=PSET;
     } else if(!strcasecmp(p, "GET")) {
-        t->token=T_INSTR;
-        t->value=GET;
+        token->token=T_INSTR;
+        token->value=GET;
     } else if(!strcasecmp(p, "MOV")) {
-        t->token=T_INSTR;
-        t->value=MOV;
+        token->token=T_INSTR;
+        token->value=MOV;
     } else if(!strcasecmp(p, "JMP")) {
-        t->token=T_INSTR;
-        t->value=JMP;
+        token->token=T_INSTR;
+        token->value=JMP;
     } else if(!strcasecmp(p, "JEQ")) {
-        t->token=T_INSTR;
-        t->value=JEQ;
+        token->token=T_INSTR;
+        token->value=JEQ;
     } else if(!strcasecmp(p, "JNE")) {
-        t->token=T_INSTR;
-        t->value=JNE;
+        token->token=T_INSTR;
+        token->value=JNE;
     } else if(!strcasecmp(p, "JLT")) {
-        t->token=T_INSTR;
-        t->value=JLT;
+        token->token=T_INSTR;
+        token->value=JLT;
     } else if(!strcasecmp(p, "JGT")) {
-        t->token=T_INSTR;
-        t->value=JGT;
+        token->token=T_INSTR;
+        token->value=JGT;
     } else if(!strcasecmp(p, "NOP")) {
-        t->token=T_INSTR;
-        t->value=NOP;
+        token->token=T_INSTR;
+        token->value=NOP;
     } else if(!strcasecmp(p, "HLT")) {
-        t->token=T_INSTR;
-        t->value=HLT;
+        token->token=T_INSTR;
+        token->value=HLT;
     } else if(tolower(p[0])=='r') {
-        t->token=T_REG;
+        token->token=T_REG;
         leftShift(p);
-        t->value=str2reg(p);
+        token->value=str2reg(p);
     } else if(!strcasecmp(p, "SP")) {
-        t->token=T_REG;
-        t->value=SP;
+        token->token=T_REG;
+        token->value=SP;
     } else if(!strcasecmp(p, "PC")) {
-        t->token=T_REG;
-        t->value=PC;
+        token->token=T_REG;
+        token->value=PC;
     } else if(!strcontains(p, "0123456789")) { // integers
-        t->token=T_INT;
-        t->value=str2int(p);
+        token->token=T_INT;
+        token->value=str2int(p);
     } else {
-        fprintf(stderr, "ERROR: unrecognized token \"%s\" in line %d!\n", p, context->infileLine);
-        return 2;
+        fprintf(stderr, "ERROR: unrecognized word \"%s\" in line %u!\n", p, context->infileLine);
+        context->status=UNRECOGNIZED_TOKEN;
+        return UNRECOGNIZED_TOKEN;
     }
-    return 0;
+    token->line=context->infileLine;
+    context->status=SUCCESS;
+    return SUCCESS;
 }
