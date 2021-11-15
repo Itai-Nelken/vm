@@ -125,12 +125,12 @@ peek
 #define S_START -1
 #define S_END -2
 
-enum {
+enum instructions {
     PUSH,
     POP,
     PEEK,
     ADD
-}; // all the instructions we need, of course there are more.
+}; // only the first four instructions.
 
 struct operation {
     short instruction;
@@ -140,29 +140,29 @@ struct operation {
 int main(void) {
     struct operation op;
     FILE *out=fopen("program.vm", "w");
-    if(!out) return 1; // return 1 if failed to open file.
+    if(out == NULL) return 1; // return 1 if failed to open file.
 
-    op.instruction=S_START;
-    op.arg1=0;
-    op.arg2=0;
-    fwrite(&op, sizeof(struct operation), 1, out);
+    op.instruction = S_START;
+    op.arg1 = 0;
+    op.arg2 = 0;
+    fwrite(&op, sizeof(op), 1, out); // sizeof(op) is the same as sizeof(struct operation)
 
-    op.instruction=PUSH;
-    op.arg1=5;
-    fwrite(&op, sizeof(struct operation), 1, out);
+    op.instruction = PUSH;
+    op.arg1 = 5;
+    fwrite(&op, sizeof(op), 1, out);
 
-    op.arg1=6;
-    fwrite(&op, sizeof(struct operation), 1, out);
-    op.arg1=0;
+    op.arg1 = 6;
+    fwrite(&op, sizeof(op), 1, out);
+    op.arg1 = 0;
 
-    op.instruction=ADD;
-    fwrite(&op, sizeof(struct operation), 1, out);
+    op.instruction = ADD;
+    fwrite(&op, sizeof(op), 1, out);
 
-    op.instruction=PEEK;
-    fwrite(&op, sizeof(struct operation), 1, out);
+    op.instruction = PEEK;
+    fwrite(&op, sizeof(op), 1, out);
 
-    op.instruction=S_END;
-    fwrite(&op, sizeof(struct operation), 1, out);
+    op.instruction = S_END;
+    fwrite(&op, sizeof(op), 1, out);
 
     fclose(out);
     return 0;
@@ -202,7 +202,7 @@ pset Ra
 
 ; jump back to the 'increment Ra' part if the value in Ra doesn't equal 10
 get Ra
-push 5
+push 10
 jne 1
 hlt ; isn't neccesary, prints 'program halted'
 ```
