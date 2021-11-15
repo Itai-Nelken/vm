@@ -73,9 +73,8 @@ int stackPeek(VM *v);
  * Print the contents of the stack.
  * 
  * @param v The VM context to use.
- * 
- * @return 0: success, 1: failure (stack is empty)
+ * @param to where to print the output to.
  ******/
-int stackDump(VM *v);
+void/*int*/ stackDump(VM *v, FILE *to);
 
 #endif // VM_H

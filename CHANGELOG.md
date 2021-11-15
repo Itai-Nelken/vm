@@ -52,4 +52,10 @@
 ### 15-16/10/2021
 - Rewrite the assembler, nothing substantial. just making the code more readable and loading the program into a dynamic array before writing it.
 
+### 24/10/2021
+- fix compilation on MacOS.
+
+### 15/11/2021
+- Add make VM print debug info (stack and register dump, current instruction) and exit when a runtime error is encountered.
+
 <hr>

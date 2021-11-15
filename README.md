@@ -78,6 +78,12 @@ you can override the following variables when running `make`:
 | `SP` | 6 | Stack Pointer (points to the stack head). |
 | `PC` | 7 | Program Counter/Instruction Pointer (Points to the instruction to execute in the program). |
 
+### Runtime errors
+The following conditions will cause a runtime error:
+* Stack is full and `PUSH` is executed.
+* Stack is empty and `POP` or `PEEK` are executed.
+* Division by zero.
+
 ### How to read disassembler output (`vas -d <vm binary>`)
 The output of the disassembler contains 3 rows:
 1) The instruction number in the program.

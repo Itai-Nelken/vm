@@ -64,7 +64,68 @@ int loadBinary(const char *binaryname, Array *program) {
 }
 
 
-void eval(VM *vm, struct operation *op) {
+static const char *instr2str(Instruction i) {
+    switch(i) {
+        case PUSH: return "PUSH";
+        case POP: return "POP";
+        case PEEK: return "PEEK";
+        case ADD: return "ADD";
+        case SUB: return "SUB";
+        case MUL: return "MUL";
+        case DIV: return "DIV";
+        case SET: return "SET";
+        case PSET: return "PSET";
+        case GET: return "GET";
+        case MOV: return "MOV";
+        case JMP: return "JMP";
+        case JEQ: return "JEQ";
+        case JNE: return "JNE";
+        case JGT: return "JGT";
+        case NOP: return "NOP";
+        case HLT: return "HLT";
+        default:
+            break;
+    }
+    return "UNKNOWN";
+}
+
+static const char *reg2str(Register r) {
+    switch(r) {
+        case A: return "A";
+        case B: return "B";
+        case C: return "C";
+        case D: return "D";
+        case E: return "E";
+        case F: return "F";
+        case SP: return "SP";
+        case PC: return "PC";
+        default:
+            break;
+    }
+    return "UNKNOWN";
+}
+
+static void dumpRegisters(VM *vm, FILE *to) {
+    for(int i=0; i<REG_COUNT; i++) {
+        fprintf(to, "Register %s contains: %d\n", reg2str(i), vm->registers[i]);
+    }
+}
+
+void runtimeError(VM *vm, struct operation *op, const char *message, int exitcode) {
+    fprintf(stderr, "\033[1;31mRUNTIME ERROR!\033[0m\n=============\n");
+    fprintf(stderr, "At instruction: 0x%X (%s), operands: %d, %d:\n", op->instruction, instr2str(op->instruction), op->arg1, op->arg2);
+    fprintf(stderr, "Error message: %s\n", message);
+    fprintf(stderr, "\nREGISTER DUMP\n=============\n");
+    dumpRegisters(vm, stderr);
+    fprintf(stderr, "\nSTACK DUMP\n==========\n");
+    stackDump(vm, stderr);
+
+    // clean up
+    vmDestroy(vm);
+    exit(exitcode);
+}
+
+static void eval(VM *vm, struct operation *op) {
     switch(op->instruction) {
         case PUSH:
             stackPush(vm, op->arg1);
@@ -88,6 +149,9 @@ void eval(VM *vm, struct operation *op) {
             break;
         case DIV: {
             int a=stackPop(vm);
+	    if(a == 0) {
+		runtimeError(vm, &(vm->program->data[vm->registers[PC]]), "division by zero!", 1);
+	    }
             stackPush(vm, stackPop(vm)/a);
             break;
         }
@@ -160,7 +224,8 @@ static int stackEmpty(VM *v) {
 
 int stackPush(VM *v, int data) {
     if(!stackFull(v)) {
-        fprintf(stderr, "stackPush(): stack is full!\n");
+        //fprintf(stderr, "stackPush(): stack is full!\n");
+        runtimeError(v, &(v->program->data[v->registers[PC]]), "stack is full!", 1);
         return 1;
     }
     v->stack[++(v->registers[SP])]=data;
@@ -169,29 +234,30 @@ int stackPush(VM *v, int data) {
 
 int stackPop(VM *v) {
     if(!stackEmpty(v)) {
-        fprintf(stderr, "stackPop(): stack is empty!\n");
-        return -1;
+        //fprintf(stderr, "stackPop(): stack is empty!\n");
+        runtimeError(v, &(v->program->data[v->registers[PC]]), "stack is empty!", 1);
+        return -1; // unreachable
     }
     return v->stack[--(v->registers[SP])+1];
 }
 
 int stackPeek(VM *v) {
     if(!stackEmpty(v)) {
-        fprintf(stderr, "stackPeek(): stack is empty!\n");
-        return -1;
+        //fprintf(stderr, "stackPeek(): stack is empty!\n");
+        runtimeError(v, &(v->program->data[v->registers[PC]]), "stack is empty!", 1);
+	return -1; // unreachable
     }
     return v->stack[(v->registers[SP])];
 }
 
-int stackDump(VM *v) {
+void /*int*/ stackDump(VM *v, FILE *to) {
     if(!stackEmpty(v)) {
-        fprintf(stderr, "stackDump(): stack is empty!\n");
-        return 1;
+        fprintf(to, "[EMPTY]\n");
+        //fprintf(stderr, "stackDump(): stack is empty!\n");
+        //return 1;
     }
     for(int i=(v->registers[SP]); i>=0; --i) {
-        printf("[%d] %d%s\n", i, v->stack[i], (v->registers[SP])==i ? " <-- SP" : "");
+        fprintf(to, "[%d] %d%s\n", i, v->stack[i], (v->registers[SP])==i ? " <-- SP" : "");
     }
-    return 0;
+    //return 0;
 }
-
-
