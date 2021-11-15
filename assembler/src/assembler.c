@@ -10,7 +10,7 @@ static inline int writeOp(FILE *f, struct operation *op) {
 Status assembleFile(const char *infile, const char *outfile) {
     FILE *out=fopen(outfile, "w");
     if(!out) {
-        perror("assemblerFile(): fopen(outfile, w)");
+        perror("assembleFile(): fopen(outfile, w)");
         return OPEN_FILE_FAILURE;
     }
     struct operation op = {
