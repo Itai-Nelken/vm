@@ -58,4 +58,7 @@
 ### 15/11/2021
 - Add make VM print debug info (stack and register dump, current instruction) and exit when a runtime error is encountered.
 
+### 16/11/2021
+- VM: runtime error on unknown opcode.
+
 <hr>

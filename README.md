@@ -83,6 +83,7 @@ The following conditions will cause a runtime error:
 * Stack is full and `PUSH` is executed.
 * Stack is empty and `POP` or `PEEK` are executed.
 * Division by zero.
+* Unknown instruction.
 
 ### How to read disassembler output (`vas -d <vm binary>`)
 The output of the disassembler contains 3 rows:

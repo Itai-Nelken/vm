@@ -150,7 +150,7 @@ static void eval(VM *vm, struct operation *op) {
         case DIV: {
             int a=stackPop(vm);
 	    if(a == 0) {
-		runtimeError(vm, &(vm->program->data[vm->registers[PC]]), "division by zero!", 1);
+		runtimeError(vm, op, "division by zero!", 1);
 	    }
             stackPush(vm, stackPop(vm)/a);
             break;
@@ -201,6 +201,8 @@ static void eval(VM *vm, struct operation *op) {
             vm->isRunning=0;
             break;
         default:
+	    runtimeError(vm, op, "Unknown OpCode!", 1);
+	    // not reached
             break;
     }
 }
