@@ -62,6 +62,7 @@
 - VM: runtime error on unknown opcode.
 
 ### 19/11/2021
-- Finally fix the makefiles
+- Finally fix the makefiles.
+- Refactor assembler and disassembler.
 
 <hr>

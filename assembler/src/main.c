@@ -39,8 +39,7 @@ int main(int argc, char **argv) {
         return 1;
     }
     int opt, ret_val=0, exit=0;
-    char *outfile=NULL, *infile=malloc(strlen(argv[1])*sizeof(char)+1);
-    strncpy(infile, argv[1], strlen(argv[1])*sizeof(char)+1);
+    char *outfile=NULL, *infile=argv[1];
 
     opt=getopt_long(argc, argv, "d:o:h", long_options, NULL);
     if(opt != -1) {
@@ -49,7 +48,7 @@ int main(int argc, char **argv) {
                 outfile=optarg;
                 break;
             case 'd':
-		// return 1 if disassembler succeds, 1 if it fails
+		        // return 1 if disassembler succeds, 1 if it fails
                 ret_val=disassembler(optarg)==0 ? 0 : 1;
                 exit=1;
                 break;
@@ -62,8 +61,8 @@ int main(int argc, char **argv) {
                 break;
         }
     }
-    if(exit!=1)
+    if(exit!=1) {
         ret_val=assembleFile(infile, outfile!=NULL ? outfile : "as.out.vm");
-    free(infile);
+    }
     return ret_val;
 }

@@ -4,119 +4,87 @@
 #include "common.h"
 #include "disassembler.h"
 
-const char *instructions[] = {
-    "PUSH",   // 0
-    "POP",    // 1
-    "PEEK",   // 2
-    "ADD",    // 3
-    "SUB",    // 4
-    "MUL",    // 5
-    "DIV",    // 6
-    "SET",    // 7
-    "PSET",   // 8
-    "GET",    // 9
-    "MOV",    // 10
-    "JMP",    // 11
-    "JEQ",    // 12
-    "JNE",    // 13
-    "JLT",    // 14
-    "JGT",    // 15
-    "NOP",    // 16
-    "HLT",    // 17
-    "UNKNOWN" // 18
-};
 const char *instr2str(Instruction i) {
     switch(i) {
         case PUSH:
-            return instructions[PUSH];
+            return "PUSH";
             break;
         case POP:
-            return instructions[POP];
+            return "POP";
             break;
         case PEEK:
-            return instructions[PEEK];
+            return "PEEK";
             break;
         case ADD:
-            return instructions[ADD];
+            return "ADD";
             break;
         case SUB:
-            return instructions[SUB];
+            return "SUB";
             break;
         case MUL:
-            return instructions[MUL];
+            return "MUL";
             break;
         case DIV:
-            return instructions[DIV];
+            return "DIV";
             break;
         case SET:
-            return instructions[SET];
+            return "SET";
             break;
         case PSET:
-            return instructions[PSET];
+            return "PSET";
             break;
         case GET:
-            return instructions[GET];
+            return "GET";
             break;
         case MOV:
-            return instructions[MOV];
+            return "MOV";
             break;
         case JMP:
-            return instructions[JMP];
+            return "JMP";
             break;
         case JEQ:
-            return instructions[JEQ];
+            return "JEQ";
             break;
         case JNE:
-            return instructions[JNE];
+            return "JNE";
             break;
         case JLT:
-            return instructions[JLT];
+            return "JLT";
             break;
         case JGT:
-            return instructions[JGT];
+            return "JGT";
             break;
         case NOP:
-            return instructions[NOP];
+            return "NOP";
             break;
         case HLT:
-            return instructions[HLT];
+            return "HLT";
             break;
         default:
-            return instructions[18];
+            return "UNKNOWN";
     }
 }
 
-const char *registers[] = {
-	"A",      // 0
-	"B",      // 1
-	"C",      // 2
-	"D",      // 3
-	"E",      // 4
-	"F",      // 5
-	"PC",     // 6
-	"SP",     // 7
-	"UNKNOWN" // 8
-};
 const char *reg2str(Register r) {
 	switch(r) {
-		case A: // 0
-			return registers[A];
-		case B: // 1
-			return registers[B];
-		case C: // 2
-			return registers[C];
-		case D: // 3
-			return registers[D];
-		case E: // 4
-			return registers[E];
-		case F: // 5
-			return registers[F];
-		case SP: // 6
-			return registers[SP];
-		case PC: // 7
-			return registers[PC];
+		case A:
+			return "A";
+		case B:
+			return "B";
+		case C:
+			return "C";
+		case D:
+			return "D";
+		case E:
+			return "E";
+		case F:
+			return "F";
+		case SP:
+			return "SP";
+		case PC:
+			return "PC";
 		default:
-			return registers[8];
+			return "UNKNOWN";
 	}
 }
 int str2reg(const char *reg) {
@@ -163,64 +131,64 @@ void disassemble(FILE *in) {
                 exit=1;
                 continue;
             case PUSH:
-                printf("\t%d 0x%X PUSH %d\n", pc, PUSH, op.arg1);
+                printf("\t%2d: 0x%X PUSH %d\n", pc, PUSH, op.arg1);
                 break;
             case POP:
-                printf("\t%d 0x%X POP\n", pc, POP);
+                printf("\t%2d: 0x%X POP\n", pc, POP);
                 break;
             case PEEK:
-                printf("\t%d 0x%X PEEK\n", pc, PEEK);
+                printf("\t%2d: 0x%X PEEK\n", pc, PEEK);
                 break;
             case ADD:
-                printf("\t%d 0x%X ADD\n", pc, ADD);
+                printf("\t%2d: 0x%X ADD\n", pc, ADD);
                 break;
             case SUB:
-                printf("\t%d 0x%X SUB\n", pc, SUB);
+                printf("\t%2d: 0x%X SUB\n", pc, SUB);
                 break;
             case MUL:
-                printf("\t%d 0x%X MUL\n", pc, MUL);
+                printf("\t%2d: 0x%X MUL\n", pc, MUL);
                 break;
             case DIV:
-                printf("\t%d 0x%X DIV\n", pc, DIV);
+                printf("\t%2d: 0x%X DIV\n", pc, DIV);
                 break;
             case SET:
-                printf("\t%d 0x%X SET R%s %d\n", pc, SET, reg2str(op.arg1), op.arg2);
+                printf("\t%2d: 0x%X SET R%s %d\n", pc, SET, reg2str(op.arg1), op.arg2);
                 break;
             case PSET:
-                printf("\t%d 0x%X PSET R%s\n", pc, PSET, reg2str(op.arg1));
+                printf("\t%2d: 0x%X PSET R%s\n", pc, PSET, reg2str(op.arg1));
                 break;
             case GET:
-                printf("\t%d 0x%X GET R%s\n", pc, GET, reg2str(op.arg1));
+                printf("\t%2d: 0x%X GET R%s\n", pc, GET, reg2str(op.arg1));
                 break;
             case MOV:
-                printf("\t%d 0x%X MOV R%s R%s\n", pc, MOV, reg2str(op.arg1), reg2str(op.arg2));
+                printf("\t%2d: 0x%X MOV R%s R%s\n", pc, MOV, reg2str(op.arg1), reg2str(op.arg2));
                 break;
             case JMP:
-                printf("\t%d 0x%X JMP %d\n", pc, JMP, op.arg1);
+                printf("\t%2d: 0x%X JMP %d\n", pc, JMP, op.arg1);
                 break;
             case JEQ:
-                printf("\t%d 0x%X JEQ %d\n", pc, JEQ, op.arg1);
+                printf("\t%2d: 0x%X JEQ %d\n", pc, JEQ, op.arg1);
                 break;
             case JNE:
-                printf("\t%d 0x%X JNE %d\n", pc, JNE, op.arg1);
+                printf("\t%2d: 0x%X JNE %d\n", pc, JNE, op.arg1);
                 break;
             case JLT:
-                printf("\t%d 0x%X JLT %d\n", pc, JLT, op.arg1);
+                printf("\t%2d: 0x%X JLT %d\n", pc, JLT, op.arg1);
                 break;
             case JGT:
-                printf("\t%d 0x%X JGT %d\n", pc, JGT, op.arg1);
+                printf("\t%2d: 0x%X JGT %d\n", pc, JGT, op.arg1);
                 break;
             case NOP:
-                printf("\t%d 0x%X NOP\n", pc, NOP);
+                printf("\t%2d: 0x%X NOP\n", pc, NOP);
                 break;
             case HLT:
-                printf("\t%d 0x%X HLT\n", pc, HLT);
+                printf("\t%2d: 0x%X HLT\n", pc, HLT);
                 break;
             default:
-                printf("\t%d UNKOWN\n", pc);
+                printf("\t%2d: UNKNOWN\n", pc);
                 break;
         }
-        fread(&op, sizeof(struct operation), 1, in);
+        fread(&op, sizeof(op), 1, in);
         pc++;
     }
 }
