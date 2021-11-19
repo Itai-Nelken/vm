@@ -61,4 +61,7 @@
 ### 16/11/2021
 - VM: runtime error on unknown opcode.
 
+### 19/11/2021
+- Finally fix the makefiles
+
 <hr>

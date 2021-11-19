@@ -5,11 +5,8 @@ SRC = $(wildcard src/*.c)
 OBJ = $(SRC:.c=.o)
 #OBJ = $(addprefix $(shell pwd)/, $(notdir $(SRC:.c=.o)))
 BIN := vas
-DEBUG ?= 0
-VERBOSE ?= 0
-ifeq (DEBUG, 1)
-	CFLAGS += -g
-endif
+VERBOSE := 0
+
 
 # verbosity for CC
 REAL_CC := $(CC)

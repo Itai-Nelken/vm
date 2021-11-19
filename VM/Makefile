@@ -4,13 +4,7 @@ CFLAGS += -Iinclude
 SRC = $(wildcard src/*.c)
 OBJ = $(SRC:.c=.o)
 BIN := vm
-DEBUG ?= 0
-VERBOSE ?= 0
-
-ifeq (DEBUG, 1)
-	@echo "compiling with debug symbols"
-	CFLAGS+= -g
-endif
+VERBOSE := 0
 
 # verbosity for CC
 REAL_CC := $(CC)

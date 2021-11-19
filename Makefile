@@ -2,19 +2,25 @@ CC := gcc
 BUILD_DIR := build
 OS := $(shell uname -s)
 ARCH := $(shell uname -m)
-CFLAGS := -Wall -Wextra -Wpedantic
+CFLAGS := -Wall -Wextra -Wpedantic -Iinclude
+DEBUG := 0
+VERBOSE := 0
+
+ifneq ($(DEBUG), 0)
+	CFLAGS += -g
+endif
 
 all: vm vas
 
 $(BUILD_DIR):
-	mkdir $(BUILD_DIR)
+	mkdir -p $(BUILD_DIR)
 
 vm: $(BUILD_DIR)
-	$(MAKE) $(CFLAGS) -C VM
+	$(MAKE) CFLAGS="$(CFLAGS)" VERBOSE=$(VERBOSE) -C VM
 	@cp VM/vm $(BUILD_DIR)/vm
 
 vas: $(BUILD_DIR)
-	$(MAKE) -C assembler
+	$(MAKE) CFLAGS="$(CFLAGS)" VERBOSE=$(VERBOSE) -C assembler
 	@cp assembler/vas $(BUILD_DIR)/vas
 
 clean:

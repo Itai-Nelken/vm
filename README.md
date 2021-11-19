@@ -26,6 +26,10 @@ you can override the following variables when running `make`:
 - `OS` - The OS name to use when compressing the build folder, default is the output of `uname -s`.
 - `ARCH` - The acrhitecture to use when compressing the build folder, default is the output of `uname -m`.
 
+and provide the following arguments:
+- `DEBUG` - Build with debug symbols, default is 0 (off).
+- `VERBOSE` - print the full commands being run, default is 0 (off).
+
 ## TODO
 - [x] Write the actual VM
    * [x] Use a dynamic array for storing the program (instead of the currently used linked list) that way we can use the `pc` register to actually point to the index of an instruction in the program.
