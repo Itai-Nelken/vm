@@ -1,0 +1,9 @@
+; example usage of the timer
+set TM 10 ; set the timer register to 10
+
+get TM ; get the value in the timer register
+peek ; print it
+push 0
+jne 1 ; if it isn't 0, jump back and check again
+hlt
+

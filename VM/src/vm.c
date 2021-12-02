@@ -99,6 +99,7 @@ static const char *reg2str(Register r) {
         case F: return "F";
         case SP: return "SP";
         case PC: return "PC";
+        case TM: return "TM";
         default:
             break;
     }
@@ -207,10 +208,15 @@ static void eval(VM *vm, struct operation *op) {
     }
 }
 
+void timerTick(VM *vm) {
+    if(vm->registers[TM] > 0) vm->registers[TM]--;
+}
+
 void exec(VM *vm) {
-    int *pc=&(vm->registers[PC]);
+    int *pc = &(vm->registers[PC]);
     for(; *pc < (int)vm->program->current && vm->isRunning != 0; (*pc)++) {
         eval(vm, &(vm->program->data[*pc]));
+        timerTick(vm);
     }
 }
 

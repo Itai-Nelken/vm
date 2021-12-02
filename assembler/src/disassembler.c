@@ -83,15 +83,20 @@ const char *reg2str(Register r) {
 			return "SP";
 		case PC:
 			return "PC";
+        case TM:
+            return "TM";
 		default:
 			return "UNKNOWN";
 	}
 }
+
 int str2reg(const char *reg) {
     if(!strcasecmp(reg, "SP")) {
         return SP;
     } else if(!strcasecmp(reg, "PC")) {
         return PC;
+    } else if(!strcasecmp(reg, "TM")) {
+        return TM;
     }
     switch(tolower(reg[0])) {
         case 'a':
@@ -113,14 +118,14 @@ int str2reg(const char *reg) {
 
 void disassemble(FILE *in) {
     struct operation op;
-    int exit=0, pc=0;
+    int exit = 0, pc = 0;
 
     fread(&op, sizeof(struct operation), 1, in);
     if(op.instruction != S_START) {
     	fprintf(stderr, "ERROR: unrecognized binary format!\n");
 	    return;
     }
-    while(exit==0 && !feof(in)) {
+    while(exit == 0 && !feof(in)) {
         switch(op.instruction) {
             case S_START:
                 printf("START:\n");
@@ -128,7 +133,7 @@ void disassemble(FILE *in) {
                 break;
             case S_END:
                 printf("END\n");
-                exit=1;
+                exit = 1;
                 continue;
             case PUSH:
                 printf("\t%2d: 0x%X PUSH %d\n", pc, PUSH, op.arg1);

@@ -29,7 +29,7 @@ typedef enum instructions {
 } Instruction;
 
 typedef enum registers {
-    A, B, C, D, E, F, SP, PC,
+    A, B, C, D, E, F, SP, PC, TM, // TM == timer
     REG_COUNT
 } Register;
 

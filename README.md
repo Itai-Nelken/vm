@@ -81,6 +81,11 @@ and provide the following arguments:
 | `F` | 5 | General purpose register. |
 | `SP` | 6 | Stack Pointer (points to the stack head). |
 | `PC` | 7 | Program Counter/Instruction Pointer (Points to the instruction to execute in the program). |
+| `TM` | 8 | Timer. if it's value isn't 0, it counts down every instruction executed. |
+
+### Timer
+There is a single timer. You can set it by setting the `TM` register to a number larger than 0.
+then every instruction executed, the value in `TM` is decremented.
 
 ### Runtime errors
 The following conditions will cause a runtime error:
