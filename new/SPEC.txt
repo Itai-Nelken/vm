@@ -1,0 +1,209 @@
+=== VM spec ===
+
+Instructions
+============
+
+<reg>   - A register.
+<const> - A constant value.
+<addr>  - A address in the binary.
+
+0x0: PUSH <reg/const>       - push the value in a register or a <const> to the stack.
+0x1: POP                    - pop a value from the stack. the value IS NOT saved.
+0x2: POPTO <reg>            - pop a value from the stack and store it in a register.
+0x3: MOV <reg>, <reg/const> - move the value in a register or a <const> into a register. the first argument is the destination register and the second argument is the source (value/register).
+0x4: LD                     - load a value in the binary at a provided address and push it to the stack. requires the address to be the stack head, it gets popped.
+0x5: ST                     - store a value at an adress. both have to be in the stack at the following order: address, value. both are popped.
+0x6: ADD                    - pop 2 values off the stack, add them, and push the result.
+0x7: SUB                    - pop 2 values off the stack, subtract the LAST PUSHED from the FIRST PUSHED, and push the result.
+0x8: MUL                    - pop 2 values off the stack, multiply them, and push the result.
+0x9: DIV                    - pop 2 values off the stack, divide the FIRST PUSHED by the LAST PUSHED, and push the result.
+0xA: JMP <addr>             - jump to an adress in the text binary section (the code section).
+0xB: JEQ <addr>             - peek at the 2 top values in the stack (they are NOT popped), if they are equal jump to <addr>.
+0xC: JNE <addr>             - peek at the 2 top values in the stack (they are NOT popped), if they are NOT equal, jump to <addr>.
+0xD: JGT <addr>             - peek at the 2 top values in the stack (they are NOT popped), if the FIRST value pushed is larger than the second jump to <addr>.
+0xE: JLE <addr>             - peek at the 2 top values in the stack (they are NOT popped), if the FIRST value pushed is smaller than the second jump to <addr>.
+0xF: REQ                    - request a service from the VM. requires the service register to contain a valid service ID.
+0x10: NOP                   - do nothing.
+0x11: HLT                   - halt the program (prints "program halted")
+
+Memory
+======
+There is the stack and the memory (a hashtable).
+the bss section in the binary is loaded into the memory.
+the stack is faster but can only be manipulated at runtime and can only hold smaller data.
+the memory is slower, but can contain larger data.
+
+Registers
+=========
+A - F: general purpose registers. used as argument registers for services.
+RQ: request register. used to specify the service ID before calling it with 'req'.
+PC: program counter (instruction pointer), contains adress of next instruction to execute.
+SP: stack pointer, contains the address of the top of the stack.
+T1, T2: timer 1 and 2, count down once every second if a value is put in them. stop when it's zero.
+
+VM services available using the 'req' instruction
+=================================================
+ * (0x1) write(data, size, fd) - write 'size' from 'data' to a file.
+    - by default, you can use 1 and 2 for stdout and stderr respectively.
+    - returns the amount of bytes written or -1 on error.
+ * (0x2) read(dest, size, fd) - read 'size' data from a file into 'dest'.
+    - by default, you can use 1 for stdin.
+    - returns the amount of read bytes or -1 on failure.
+ * (0x3) open(path, mode) - open a file.
+    - mode can be either 0b01 (read only), 0b10 (write only), and 0b11 (read-write)
+    - returns file descriptor ID for opened file or -1 on failure.
+ * (0x4) close(fd) - close a file descriptor.
+    - trying to close stdin, stdout, or stderr causes a runtime error.
+ * (0x5) exit(status) - halt the program and exit with exit code 'status'
+    - causes the VM to stop, clean up, and exit with value 'status'.
+
+To call a service, put it's number in the RQ register. arguments are pushed to the stack, the first argument being pushed first.
+The arguments are popped from the stack and the return value (if exists) is pushed.
+
+
+Format for binaries
+===================
+
+SYMBOLS
+-------
+START - at the start of the binary.
+TEXT  - the code section.
+DATA  - the initialized data section.
+BSS   - the unintialized data section.
+END   - at the end of the binary.
+
+DIAGRAM
+-------
+__________
+|        |
+|  text  |
+|________|
+|        |
+|  data  |
+|________|
+|        |
+|  bss   |
+|________|
+
+The bss section is loaded into the memory with all values set to 0.
+
+
+Assembly syntax
+===============
+
+syntax:
+---------
+<instruction> <arg1>, <arg2>
+; this is a comment
+; it goes until end of line
+<label>:
+    ; do stuff
+---------
+
+example:
+--------------
+push 1
+push 2
+add
+popto RA
+
+mov RB, 10
+push RB
+push 10
+jeq label
+jmp end
+label:
+    add
+end:
+    mov RQ, 0x5 ; exit
+    push 0      ; with status 0
+    req
+--------------
+labels are an abstraction the assembler provides for addresses.
+they are simply a human readable name for the adresses.
+
+LITERALS
+--------
+regular decimal numbers, for example: 42
+hexadecimal numbers, for example: 0x5A
+binary numbers, for example: 0b11
+charaters are translated to their ascii equivalent, but you can define them in a human readable form. for example: 'A'
+
+MACROS
+------
+A macro is a bunch of instructions that can be grouped toghether under a name that accepts arguments.
+macros are expanded at assembly time and references to the arguments are replaced with the provided arguments.
+macros are NOT allowed to have the same names as instructions and registers.
+
+syntax:
+---------
+@macro <name> <argument count>
+    ; instructions go here.
+    ; make sure to restore everything ti the way it was at the end,
+    ; and don't make macros to long. use subroutines for longer stuff.
+    ; to reference an argument, use $<argument number>
+    ; for example $1 means the first argument and $2 means the 2nd one, and so on.
+@endmacro
+---------
+
+example:
+-------
+; declare the macro
+@macro addition 2
+    push $1
+    push $2
+    add
+@endmacro
+
+; use it
+addition 1, 2 ; when done, 3 will be on the stack
+
+; when expaneded, it will be replaced with:
+;
+; push 1
+; push 2
+; add
+;
+-------
+
+NAMED CONSTANTS
+---------------
+This is an abstraction the assembler provides for constants.
+at assembly time, the name of the named constant will be replaced with it's value.
+named constants are NOT allowed to have the name as instructions and registers.
+
+syntax:
+----------
+@define NAME <value>
+----------
+
+example:
+---------
+; declare the named constant
+@define VERSION 1
+
+; use it
+push VERSION
+push 1
+jeq ok
+jmp end
+ok:
+    ; exit with status 0
+    mov RQ, 0x5
+    push 0
+    req
+end:
+    ; exit with status 1
+    mov RQ, 0x5
+    push 1
+    req
+---------
+
+Includes
+========
+includes allow you to define macros and constants in a different file and then include it from your program file.
+
+syntax:
+---------
+@include path/to/file.inc
+---------
