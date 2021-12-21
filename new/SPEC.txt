@@ -17,14 +17,19 @@ Instructions
 0x7: SUB                    - pop 2 values off the stack, subtract the LAST PUSHED from the FIRST PUSHED, and push the result.
 0x8: MUL                    - pop 2 values off the stack, multiply them, and push the result.
 0x9: DIV                    - pop 2 values off the stack, divide the FIRST PUSHED by the LAST PUSHED, and push the result.
-0xA: JMP <addr>             - jump to an adress in the text binary section (the code section).
-0xB: JEQ <addr>             - peek at the 2 top values in the stack (they are NOT popped), if they are equal jump to <addr>.
-0xC: JNE <addr>             - peek at the 2 top values in the stack (they are NOT popped), if they are NOT equal, jump to <addr>.
-0xD: JGT <addr>             - peek at the 2 top values in the stack (they are NOT popped), if the FIRST value pushed is larger than the second jump to <addr>.
-0xE: JLE <addr>             - peek at the 2 top values in the stack (they are NOT popped), if the FIRST value pushed is smaller than the second jump to <addr>.
-0xF: REQ                    - request a service from the VM. requires the service register to contain a valid service ID.
-0x10: NOP                   - do nothing.
-0x11: HLT                   - halt the program (prints "program halted")
+0xA: AND                    - pop 2 values off the stack, bitwise AND them, and push the result.
+0xB: OR                     - pop 2 values off the stack, bitwise OR them, and push the result.
+0xC: XOR                    - pop 2 values off the stack, bitwise XOR them, and push the result.
+0xD: SHL                    - pop 2 values off the stack, bitwise shift left them, and push the result.
+0xE: SHR                    - pop 2 values off the stack, bitwise shift right them, and push the result.
+0xF: JMP <addr>             - jump to an adress in the text binary section (the code section).
+0x10: JEQ <addr>            - peek at the 2 top values in the stack (they are NOT popped), if they are equal jump to <addr>.
+0x11: JNE <addr>            - peek at the 2 top values in the stack (they are NOT popped), if they are NOT equal, jump to <addr>.
+0x12: JGT <addr>            - peek at the 2 top values in the stack (they are NOT popped), if the FIRST value pushed is larger than the second jump to <addr>.
+0x13: JLE <addr>            - peek at the 2 top values in the stack (they are NOT popped), if the FIRST value pushed is smaller than the second jump to <addr>.
+0x14: REQ                   - request a service from the VM. requires the service register to contain a valid service ID.
+0x15: NOP                   - do nothing.
+0x16: HLT                   - halt the program (prints "program halted")
 
 Memory
 ======
@@ -40,26 +45,38 @@ RQ: request register. used to specify the service ID before calling it with 'req
 PC: program counter (instruction pointer), contains adress of next instruction to execute.
 SP: stack pointer, contains the address of the top of the stack.
 T1, T2: timer 1 and 2, count down once every second if a value is put in them. stop when it's zero.
+FLAGS: flags that can be set by the math and bitwise operators:
+    - flags (first to last):
+        * ret - the return adress of services
 
 VM services available using the 'req' instruction
 =================================================
- * (0x1) write(data, size, fd) - write 'size' from 'data' to a file.
+ * (0x0) write(data, size, fd) - write 'size' from 'data' to a file.
     - by default, you can use 1 and 2 for stdout and stderr respectively.
     - returns the amount of bytes written or -1 on error.
- * (0x2) read(dest, size, fd) - read 'size' data from a file into 'dest'.
+ *
+ * (0x1) read(dest, size, fd) - read 'size' data from a file into 'dest'.
     - by default, you can use 1 for stdin.
     - returns the amount of read bytes or -1 on failure.
- * (0x3) open(path, mode) - open a file.
+ * (0x2) open(path, mode) - open a file.
     - mode can be either 0b01 (read only), 0b10 (write only), and 0b11 (read-write)
     - returns file descriptor ID for opened file or -1 on failure.
- * (0x4) close(fd) - close a file descriptor.
+ * (0x3) close(fd) - close a file descriptor.
     - trying to close stdin, stdout, or stderr causes a runtime error.
- * (0x5) exit(status) - halt the program and exit with exit code 'status'
+ * (0x4) exit(status) - halt the program and exit with exit code 'status'
     - causes the VM to stop, clean up, and exit with value 'status'.
 
 To call a service, put it's number in the RQ register. arguments are pushed to the stack, the first argument being pushed first.
-The arguments are popped from the stack and the return value (if exists) is pushed.
+The arguments are popped from the stack and the return value (if exists) is put in the ret bit in the flags register.
 
+Runtime errors
+==============
+ * (0x1) Division by zero.
+ * (0x2) Stack overflow.
+ * (0x3) Stack underflow.
+ * (0x4) Invalid adress.
+ * (0x5) Insufficient arguments to request.
+ * (0x6) Invalid request.
 
 Format for binaries
 ===================
@@ -128,6 +145,7 @@ regular decimal numbers, for example: 42
 hexadecimal numbers, for example: 0x5A
 binary numbers, for example: 0b11
 charaters are translated to their ascii equivalent, but you can define them in a human readable form. for example: 'A'
+strings are "arrays" of characters. they can be declared as so: "string".
 
 MACROS
 ------
@@ -199,11 +217,80 @@ end:
     req
 ---------
 
+CONSTANT EXPRESSIONS
+--------------------
+A way to show how you got a number by putting the calculation inside '@()'.
+The assembler will calculate the result at assembly time, so runtime performance isn't affected.
+
+available operators:
+--------------------
++, -, *, / (addition, subtraction, multiplication, division)
+&, |, <<, >>, ^, ~ (bitwise and, or, left shift, right shift, xor, flip bits)
+
+syntax:
+---------
+@(<expr>)
+---------
+
+example:
+---------
+push @(1 + 2) ; same as 'push 3'
+---------
+
+Sections
+========
+Using the 'section' keyword, you can specify what section the following data goes in: text, data, or bss.
+The default section is text.
+
+example:
+---------
+section text
+; everything here goes in text section.
+section data
+; everything here goes in the data section.
+---------
+
 Includes
 ========
-includes allow you to define macros and constants in a different file and then include it from your program file.
+includes allow you to define macros and named constants in a different file and then include it from your program file.
 
 syntax:
 ---------
 @include path/to/file.inc
+---------
+
+examples
+========
+
+count to 10:
+---------
+@macro inc 1
+    push $1
+    push 1
+    add
+    popto $1
+@endmacro
+
+@macro print 0
+    ; backup the value on the stack in rF
+    popto rF
+    push rF
+
+    mov RQ, 0x0 ; write
+    ; data argument should already be on the stack
+    push 4 ; sizeof(int)
+    push 1 ; stdout
+    req
+
+    ; restore the value
+    push rF
+@endmacro
+
+mov rA, 0
+loop:
+    inc rA
+    push rA
+    print
+    push 10
+    jne loop
 ---------
