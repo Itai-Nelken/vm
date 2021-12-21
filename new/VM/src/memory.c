@@ -5,7 +5,7 @@
 void *allocm(size_t size) {
     void *result = malloc(size);
     if(result == NULL) {
-        LOGFATAL(1, "allocm(%lu): malloc() failed!", size);
+        LOGFATAL(1, "malloc(%lu) failed!", size);
     }
     return result;
 }
@@ -13,7 +13,7 @@ void *allocm(size_t size) {
 void *reallocm(void *ptr, size_t size) {
     void *result = realloc(ptr, size);
     if(result == NULL) {
-        LOGFATAL(1, "reallocm(%p, %lu): realloc() failed!", ptr, size);
+        LOGFATAL(1, "realloc(%p, %lu) failed!", ptr, size);
     }
     return result;
 }

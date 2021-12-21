@@ -16,24 +16,24 @@
 
 /*** log macros ***/
 #ifdef DEBUG_LOG
-#   define LOG(fmt, ...) do { \
-        printf("[LOG]: "); \
-        printf(fmt, __VA_ARGS__); \
+#   define LOG(...) do { \
+        printf("[%s(): LOG]: ", __PRETTY_FUNCTION__); \
+        printf(__VA_ARGS__); \
         printf("\n"); \
     } while(0)
-#   define LOGWARN(fmt, ...) do { \
-        printf("[WARNING]: "); \
-        printf(fmt, __VA_ARGS__); \
+#   define LOGWARN(...) do { \
+        printf("[%s(): WARNING]: ", __PRETTY_FUNCTION__); \
+        printf(__VA_ARGS__); \
         printf("\n"); \
     } while(0)
-#   define LOGERR(fmt, ...) do { \
-        printf("[ERROR]: "); \
-        printf(fmt, __VA_ARGS__); \
+#   define LOGERR(...) do { \
+        printf("[%s(): ERROR]: ", __PRETTY_FUNCTION__); \
+        printf(__VA_ARGS__); \
         printf("\n"); \
     } while(0)
-#   define LOGFATAL(exitStatus, fmt, ...) do { \
-       fprintf(stderr, "[FATAL]: "); \
-       fprintf(stderr, fmt, __VA_ARGS__); \
+#   define LOGFATAL(exitStatus, ...) do { \
+       fprintf(stderr, "[%s(): FATAL]: ", __PRETTY_FUNCTION__); \
+       fprintf(stderr, __VA_ARGS__); \
        fprintf(stderr, "\n"); \
        exit(exitStatus); \
     } while(0)
@@ -74,5 +74,23 @@ typedef enum registers {
     FLAGS,            // well, flags...
     REGISTER_COUNT
 } Register;
+
+typedef enum serivces {
+    SR_WRITE = 0x0,
+    SR_READ,
+    SR_OPEN, SR_CLOSE,
+    SR_EXIT,
+    SERVICE_COUNT
+} Service;
+
+typedef enum runtime_errors {
+    RERR_DIVISION_BY_ZERO = 0x1,
+    RERR_STACK_OVERFLOW,
+    RERR_STACK_UNDERFLOW,
+    RERR_INVALID_ADDRESS,
+    RERR_INSUFFICIENT_ARGS_TO_SERVICE,
+    RERR_INVALID_REQUEST,
+    RUNTIME_ERRORS_COUNT
+} RuntimeError;
 
 #endif // COMMON_H

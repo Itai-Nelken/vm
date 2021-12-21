@@ -41,7 +41,7 @@ const char *instr2str(OpCode instruction) {
         case OP_HLT:
             return "HLT";
         default:
-            LOGERR("instr2str(0x%X): Unknown instruction!", instruction);
+            LOGERR("Unknown instruction 0x%X!", instruction);
             break;
     }
     return "UNKNOWN";

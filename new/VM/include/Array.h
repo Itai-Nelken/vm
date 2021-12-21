@@ -44,7 +44,7 @@ void arrayAppend(Array *a, Data value);
  * Get the value at an index of the array.
  * @param a An initialized array.
  * @param index The index of the value.
- * @param dest a pointer to where to put the value.
+ * @param dest A pointer to where to put the value.
  ***/
 void arrayGet(Array *a, int index, Data *dest);
 

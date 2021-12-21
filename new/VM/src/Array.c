@@ -23,7 +23,7 @@ Array *newArray(size_t initial_size) {
     return a;
 }
 
-void arrayFree(Array *a) {
+void freeArray(Array *a) {
     if(a->has_allocated) {
         freem(a->data);
     }
@@ -41,18 +41,25 @@ void arrayAppend(Array *a, Data value) {
         a->size *= ARRAY_DEFAULT_STEP;
         a->data = reallocm(a->data, a->size);
     }
-    a->data[++a->size] = value;
+    a->data[++a->current] = value;
 }
 
 void arrayGet(Array *a, int index, Data *dest) {
     ASSERT(index >= 0);
-    *dest = a->data[a->current];
+
+    *dest = a->data[index];
 }
 
 void arrayDump(Array *a) {
-    for(int i = 0; i < a->current; i++) {
-        printf("[%d]: ");
-        arrayPrintData(a->data[i]);
-        printf("\n");
+    if(a->current == 0) {
+        printf("[0]: %d\n", a->data[0]);
+    } else if(a->current == -1) {
+        LOGWARN("array is empty!");
+    } else {
+        for(int i = 0; i < a->current; i++) {
+            printf("[%d]: ");
+            arrayPrintData(a->data[i]);
+            printf("\n");
+        }
     }
 }
