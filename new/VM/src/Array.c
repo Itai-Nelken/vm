@@ -37,7 +37,7 @@ void arrayAppend(Array *a, Data value) {
         a->data = allocm(sizeof(Data) * a->size);
         a->has_allocated = true;
     }
-    if(a->current + 1 > a->size) {
+    if(a->current + 1 > (int)a->size) {
         a->size *= ARRAY_DEFAULT_STEP;
         a->data = reallocm(a->data, a->size);
     }
@@ -57,7 +57,7 @@ void arrayDump(Array *a) {
         LOGWARN("array is empty!");
     } else {
         for(int i = 0; i < a->current; i++) {
-            printf("[%d]: ");
+            printf("[%d]: ", i);
             arrayPrintData(a->data[i]);
             printf("\n");
         }

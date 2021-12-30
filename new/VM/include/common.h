@@ -17,22 +17,22 @@
 /*** log macros ***/
 #ifdef DEBUG_LOG
 #   define LOG(...) do { \
-        printf("[%s(): LOG]: ", __PRETTY_FUNCTION__); \
+        printf("[%s(): LOG]: ", __func__); \
         printf(__VA_ARGS__); \
         printf("\n"); \
     } while(0)
 #   define LOGWARN(...) do { \
-        printf("[%s(): WARNING]: ", __PRETTY_FUNCTION__); \
+        printf("[%s(): WARNING]: ", __func__); \
         printf(__VA_ARGS__); \
         printf("\n"); \
     } while(0)
 #   define LOGERR(...) do { \
-        printf("[%s(): ERROR]: ", __PRETTY_FUNCTION__); \
+        printf("[%s(): ERROR]: ", __func__); \
         printf(__VA_ARGS__); \
         printf("\n"); \
     } while(0)
 #   define LOGFATAL(exitStatus, ...) do { \
-       fprintf(stderr, "[%s(): FATAL]: ", __PRETTY_FUNCTION__); \
+       fprintf(stderr, "[%s(): FATAL]: ", __func__); \
        fprintf(stderr, __VA_ARGS__); \
        fprintf(stderr, "\n"); \
        exit(exitStatus); \
@@ -46,7 +46,7 @@
 
 #define ASSERT(expr) do { \
     if(!(expr)) { \
-        fprintf(stderr, "\n%s:%d in function %s(): assertion '%s' failed!\n", __FILE__, __LINE__, __PRETTY_FUNCTION__, #expr); \
+        fprintf(stderr, "\n%s:%d in function %s(): assertion '%s' failed!\n", __FILE__, __LINE__, __func__, #expr); \
         abort(); \
     } \
 } while(0)
