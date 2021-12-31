@@ -2,7 +2,7 @@
 
 #include "table.h"
 int main(void) {
-	Table *t = newTable(2);
+	Table *t = newTable();
 	tableInsert(t, "Itai", 16);
 	tableInsert(t, "Shahar", 13);
 	tableInsert(t, "Netanel", 10);
