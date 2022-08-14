@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <pthread.h>
 #include "common.h"
 #include "Array.h"
 #include "vm.h"
@@ -107,9 +110,11 @@ static const char *reg2str(Register r) {
 }
 
 static void dumpRegisters(VM *vm, FILE *to) {
+    pthread_mutex_lock(&vm->timer_register_mutex);
     for(int i=0; i<REG_COUNT; i++) {
         fprintf(to, "Register %s contains: %d\n", reg2str(i), vm->registers[i]);
     }
+    pthread_mutex_unlock(&vm->timer_register_mutex);
 }
 
 void runtimeError(VM *vm, struct operation *op, const char *message, int exitcode) {
@@ -150,9 +155,9 @@ static void eval(VM *vm, struct operation *op) {
             break;
         case DIV: {
             int a=stackPop(vm);
-	    if(a == 0) {
-		runtimeError(vm, op, "division by zero!", 1);
-	    }
+	        if(a == 0) {
+		        runtimeError(vm, op, "division by zero!", 1);
+	        }
             stackPush(vm, stackPop(vm)/a);
             break;
         }
@@ -166,7 +171,13 @@ static void eval(VM *vm, struct operation *op) {
             stackPush(vm, vm->registers[op->arg1]);
             break;
         case MOV:
-            vm->registers[op->arg1]=vm->registers[op->arg2];
+            if(op->arg1 == TM || op->arg2 == TM) {
+                pthread_mutex_lock(&vm->timer_register_mutex);
+                vm->registers[op->arg1]=vm->registers[op->arg2];
+                pthread_mutex_unlock(&vm->timer_register_mutex);
+            } else {
+                vm->registers[op->arg1]=vm->registers[op->arg2];
+            }
             break;
         case JMP:
             vm->registers[PC]=op->arg1-1; // -1 because main loop increments it
@@ -208,16 +219,39 @@ static void eval(VM *vm, struct operation *op) {
     }
 }
 
-void timerTick(VM *vm) {
-    if(vm->registers[TM] > 0) vm->registers[TM]--;
+static void *timerTick(void *vm) {
+    VM *v = (VM*)vm;
+    while(v->isRunning != 0) {
+        sleep(1);
+        pthread_mutex_lock(&v->timer_register_mutex);
+        if(v->registers[TM] > 0) v->registers[TM]--;
+        pthread_mutex_unlock(&v->timer_register_mutex);
+    }
+    return NULL;
 }
 
 void exec(VM *vm) {
-    int *pc = &(vm->registers[PC]);
+    // set up timer thread
+    if(pthread_mutex_init(&vm->timer_register_mutex, NULL) != 0) {
+        fprintf(stderr, "\x1b[1;31mError:\x1b[0m failed to initialize timer register mutex!\n");
+        return;
+    }
+
+    pthread_t timer_thread_id;
+    int ret = 0;
+    if((ret = pthread_create(&timer_thread_id, NULL, timerTick, vm)) != 0) {
+        fprintf(stderr, "\x1b[1;31mError:\x1b[0m failed to initialize timer thread: %s\n", strerror(ret));
+        return;
+    }
+
+    register int *pc = &(vm->registers[PC]);
     for(; *pc < (int)vm->program->current && vm->isRunning != 0; (*pc)++) {
         eval(vm, &(vm->program->data[*pc]));
-        timerTick(vm);
+        //timerTick(vm);
     }
+
+    pthread_join(timer_thread_id, NULL);
+    pthread_mutex_destroy(&vm->timer_register_mutex);
 }
 
 // 0: full, 1: not full

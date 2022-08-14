@@ -1,10 +1,12 @@
 #ifndef VM_H
 #define VM_H
+#include <pthread.h>
 #include "common.h"
 #include "Array.h"
 
 typedef struct vm {
     int isRunning;
+    pthread_mutex_t timer_register_mutex;
     int stack[STACK_SIZE];
     int registers[REG_COUNT];
     Array *program;

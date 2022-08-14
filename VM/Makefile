@@ -1,6 +1,6 @@
 CC := gcc
 LD := gcc
-CFLAGS += -Iinclude
+CFLAGS += -Iinclude -lpthread
 SRC = $(wildcard src/*.c)
 OBJ = $(SRC:.c=.o)
 BIN := vm
