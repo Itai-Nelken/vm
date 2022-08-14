@@ -5,38 +5,36 @@ Instructions
 
 <reg>   - A register.
 <const> - A constant value.
-<addr>  - A address in the binary.
+<addr>  - A address.
 
-0x0: PUSH <reg/const>       - push the value in a register or a <const> to the stack.
-0x1: POP                    - pop a value from the stack. the value IS NOT saved.
-0x2: POPTO <reg>            - pop a value from the stack and store it in a register.
-0x3: MOV <reg>, <reg/const> - move the value in a register or a <const> into a register. the first argument is the destination register and the second argument is the source (value/register).
-0x4: LD                     - load a value in the binary at a provided address and push it to the stack. requires the address to be the stack head, it gets popped.
-0x5: ST                     - store a value at an adress. both have to be in the stack at the following order: address, value. both are popped.
-0x6: ADD                    - pop 2 values off the stack, add them, and push the result.
-0x7: SUB                    - pop 2 values off the stack, subtract the LAST PUSHED from the FIRST PUSHED, and push the result.
-0x8: MUL                    - pop 2 values off the stack, multiply them, and push the result.
-0x9: DIV                    - pop 2 values off the stack, divide the FIRST PUSHED by the LAST PUSHED, and push the result.
-0xA: AND                    - pop 2 values off the stack, bitwise AND them, and push the result.
-0xB: OR                     - pop 2 values off the stack, bitwise OR them, and push the result.
-0xC: XOR                    - pop 2 values off the stack, bitwise XOR them, and push the result.
-0xD: SHL                    - pop 2 values off the stack, bitwise shift left them, and push the result.
-0xE: SHR                    - pop 2 values off the stack, bitwise shift right them, and push the result.
-0xF: JMP <addr>             - jump to an adress in the text binary section (the code section).
-0x10: JEQ <addr>            - peek at the 2 top values in the stack (they are NOT popped), if they are equal jump to <addr>.
-0x11: JNE <addr>            - peek at the 2 top values in the stack (they are NOT popped), if they are NOT equal, jump to <addr>.
-0x12: JGT <addr>            - peek at the 2 top values in the stack (they are NOT popped), if the FIRST value pushed is larger than the second jump to <addr>.
-0x13: JLE <addr>            - peek at the 2 top values in the stack (they are NOT popped), if the FIRST value pushed is smaller than the second jump to <addr>.
-0x14: REQ                   - request a service from the VM. requires the service register to contain a valid service ID.
-0x15: NOP                   - do nothing.
-0x16: HLT                   - halt the program (prints "program halted")
+0x0:  PUSH <reg/const>       - push the value in a register or a <const> to the stack.
+0x1:  POP [<reg>]            - pop a value from the stack and optionally save it in a register. if no register is provided, the value IS NOT saved.
+0x2:  PEEK [<reg>]           - duplicate the value at the top of the stack or put in a register if provided.
+0x3:  MOV <reg>, <reg/const> - move the value in a register or a <const> into a register. the first argument is the destination register and the second argument is the source (value/register).
+0x4:  LD                     - load a value in the binary at a provided address and push it to the stack. requires the address to be the stack head, it gets popped.
+0x5:  ST                     - store a value at an adress. both have to be in the stack at the following order: address, value. both are popped.
+0x6:  ADD                    - pop 2 values off the stack, add them, and push the result.
+0x7:  SUB                    - pop 2 values off the stack, subtract the LAST PUSHED from the FIRST PUSHED, and push the result.
+0x8:  MUL                    - pop 2 values off the stack, multiply them, and push the result.
+0x9:  DIV                    - pop 2 values off the stack, divide the FIRST PUSHED by the LAST PUSHED, and push the result.
+0xA:  AND                    - pop 2 values off the stack, bitwise AND them, and push the result.
+0xB:  OR                     - pop 2 values off the stack, bitwise OR them, and push the result.
+0xC:  XOR                    - pop 2 values off the stack, bitwise XOR them, and push the result.
+0xD:  SHL                    - pop 2 values off the stack, bitwise shift left them, and push the result.
+0xE:  SHR                    - pop 2 values off the stack, bitwise shift right them, and push the result.
+0xF:  JMP <addr>             - jump to an adress in the text binary section (the code section).
+0x10: JEQ <addr>             - Pop the 2 top values at the top of the stack, if they are equal jump to <addr>.
+0x11: JNE <addr>             - Pop the 2 top values at the top of the stack, if they are NOT equal, jump to <addr>.
+0x12: JGT <addr>             - Pop the 2 top values at the top of the stack, if the FIRST value pushed is larger than the second jump to <addr>.
+0x13: JLE <addr>             - Pop the 2 top values at the top of the stack, if the FIRST value pushed is smaller than the second jump to <addr>.
+0x14: REQ                    - Request a service. requires the service register to contain a valid service ID.
+0x15: NOP                    - Do nothing.
+0x16: HLT                    - Halt the program
 
 Memory
 ======
-There is the stack and the memory (a hashtable).
-the bss section in the binary is loaded into the memory.
-the stack is faster but can only be manipulated at runtime and can only hold smaller data.
-the memory is slower, but can contain larger data.
+There is the stack (256 bytes) and the memory (1K).
+the data section in the binary is loaded into the memory.
 
 Registers
 =========
@@ -47,14 +45,14 @@ SP: stack pointer, contains the address of the top of the stack.
 T1, T2: timer 1 and 2, count down once every second if a value is put in them. stop when it's zero.
 FLAGS: flags that can be set by the math and bitwise operators:
     - flags (first to last):
-        * ret - the return adress of services
+        * N - set if the last operation resulted in a negative number pushed to the stack.
+        * Z - set if the last operation resulted in zero pushed to the stack.
 
 VM services available using the 'req' instruction
 =================================================
  * (0x0) write(data, size, fd) - write 'size' from 'data' to a file.
     - by default, you can use 1 and 2 for stdout and stderr respectively.
     - returns the amount of bytes written or -1 on error.
- *
  * (0x1) read(dest, size, fd) - read 'size' data from a file into 'dest'.
     - by default, you can use 1 for stdin.
     - returns the amount of read bytes or -1 on failure.
@@ -71,12 +69,12 @@ The arguments are popped from the stack and the return value (if exists) is put 
 
 Runtime errors
 ==============
- * (0x1) Division by zero.
- * (0x2) Stack overflow.
- * (0x3) Stack underflow.
- * (0x4) Invalid adress.
- * (0x5) Insufficient arguments to request.
- * (0x6) Invalid request.
+ * (0x0) Division by zero.
+ * (0x1) Stack overflow.
+ * (0x2) Stack underflow.
+ * (0x3) Invalid address.
+ * (0x4) Insufficient arguments for a request.
+ * (0x5) Invalid request.
 
 Format for binaries
 ===================
@@ -84,26 +82,23 @@ Format for binaries
 SYMBOLS
 -------
 START - at the start of the binary.
-TEXT  - the code section.
-DATA  - the initialized data section.
-BSS   - the unintialized data section.
+CODE  - the code section.
+DATA  - the data section.
 END   - at the end of the binary.
 
 DIAGRAM
 -------
+START
 __________
 |        |
-|  text  |
+|  code  |
 |________|
 |        |
 |  data  |
 |________|
-|        |
-|  bss   |
-|________|
+END
 
-The bss section is loaded into the memory with all values set to 0.
-
+The data section is loaded into the memory.
 
 Assembly syntax
 ===============
@@ -122,7 +117,7 @@ example:
 push 1
 push 2
 add
-popto RA
+pop RA
 
 mov RB, 10
 push RB
@@ -141,11 +136,11 @@ they are simply a human readable name for the adresses.
 
 LITERALS
 --------
-regular decimal numbers, for example: 42
+decimal numbers, for example: 42
 hexadecimal numbers, for example: 0x5A
 binary numbers, for example: 0b11
 charaters are translated to their ascii equivalent, but you can define them in a human readable form. for example: 'A'
-strings are "arrays" of characters. they can be declared as so: "string".
+strings are "arrays" of characters. they can be declared like this: "string".
 
 MACROS
 ------
@@ -239,8 +234,8 @@ push @(1 + 2) ; same as 'push 3'
 
 Sections
 ========
-Using the 'section' keyword, you can specify what section the following data goes in: text, data, or bss.
-The default section is text.
+Using the 'section' keyword, you can specify what section the following data goes in: code, or data.
+The default section is code.
 
 example:
 ---------
@@ -268,13 +263,12 @@ count to 10:
     push $1
     push 1
     add
-    popto $1
+    pop $1
 @endmacro
 
 @macro print 0
-    ; backup the value on the stack in rF
-    popto rF
-    push rF
+    ; backup the value on the stack to rF
+    pop rF
 
     mov RQ, 0x0 ; write
     ; data argument should already be on the stack
@@ -294,3 +288,19 @@ loop:
     push 10
     jne loop
 ---------
+
+print a string:
+---------------
+push message
+push 13 ; length of "Hello, World!"
+push 1 ; stdout
+mov rq, 0 ; write
+req
+
+push 0
+mov rq, 4 ; exit
+req
+
+section data
+message: "Hello, World!"
+---------------

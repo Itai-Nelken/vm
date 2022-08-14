@@ -2,7 +2,7 @@ CC := gcc
 BUILD_DIR := build
 OS := $(shell uname -s)
 ARCH := $(shell uname -m)
-CFLAGS := -Wall -Wextra -Wpedantic -std=c99 -Iinclude
+CFLAGS := -Wall -Wextra -Wpedantic -std=c99 -Iinclude -I../include
 DEBUG := 0
 VERBOSE := 0
 
