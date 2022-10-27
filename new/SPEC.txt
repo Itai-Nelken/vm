@@ -7,6 +7,8 @@ Instructions
 <const> - A constant value.
 <addr>  - A address.
 
+[<xxx>] - An optional argument.
+
 0x0:  PUSH <reg/const>       - push the value in a register or a <const> to the stack.
 0x1:  POP [<reg>]            - pop a value from the stack and optionally save it in a register. if no register is provided, the value IS NOT saved.
 0x2:  PEEK [<reg>]           - duplicate the value at the top of the stack or put in a register if provided.
@@ -152,7 +154,7 @@ syntax:
 ---------
 @macro <name> <argument count>
     ; instructions go here.
-    ; make sure to restore everything ti the way it was at the end,
+    ; make sure to restore everything to the way it was at the end,
     ; and don't make macros to long. use subroutines for longer stuff.
     ; to reference an argument, use $<argument number>
     ; for example $1 means the first argument and $2 means the 2nd one, and so on.
