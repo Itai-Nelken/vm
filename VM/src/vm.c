@@ -162,7 +162,13 @@ static void eval(VM *vm, struct operation *op) {
             break;
         }
         case SET:
+            if(op->arg1 == TM) {
+                pthread_mutex_lock(&vm->timer_register_mutex);
+            }
             vm->registers[op->arg1]=op->arg2;
+            if(op->arg1 == TM) {
+                pthread_mutex_unlock(&vm->timer_register_mutex);
+            }
             break;
         case PSET:
             vm->registers[op->arg1]=stackPop(vm);
