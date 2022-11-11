@@ -1,5 +1,6 @@
 
 set(sources
+    src/Vm.c
     src/main.c
 )
 

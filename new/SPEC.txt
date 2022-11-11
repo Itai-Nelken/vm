@@ -4,8 +4,8 @@ Instructions
 ============
 
 <reg>   - A register.
-<const> - A constant value.
-<addr>  - A address.
+<const> - A constant valuen (up to 24 bits, unsigned only).
+<addr>  - An address.
 
 [<xxx>] - An optional argument.
 
